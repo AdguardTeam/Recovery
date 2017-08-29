@@ -1,0 +1,41 @@
+{
+    "status": {
+        "message": "Status"
+    },
+    "mechanisms": {
+        "message": "site you are trying to navigate uses anti-blocking mechanisms"
+    },
+    "adblock_recovery": {
+        "message": "Adblock recovery"
+    },
+    "adblock_wall_description": {
+        "message": "Blocking access to content description"
+    },
+    "paywall_description": {
+        "message": "Paywall description"
+    },
+    "adblock_warning_description": {
+        "message": "Adblock warning description"
+    },
+    "ad_reinjection_description": {
+        "message": "Ad Reinjection\/Recovery description"
+    },
+    "disable_ads_description": {
+        "message": "Disable ads description"
+    },
+    "adblock_wall": {
+        "message": "Blocking access to content"
+    },
+    "adblock_warning": {
+        "message": "Adblock warning"
+    },
+    "paywall": {
+        "message": "Paywall"
+    },
+    "ad_reinjection": {
+        "message": "Ad Reinjection\/Recovery"
+    },
+    "disable_ads": {
+        "message": "Disable ads"
+    }
+}

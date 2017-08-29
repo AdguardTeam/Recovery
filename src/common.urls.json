@@ -1,0 +1,40 @@
+{
+    "data": [{
+            "domain": "bild.de",
+            "categories": [1, 2],
+            "issueLink": "https://github.com/"
+        },
+        {
+            "domain": "cnews.ru",
+            "categories": [1, 2],
+            "issueLink": "https://github.com/"
+        },
+        {
+            "domain": "habrahabr.ru",
+            "categories": [3],
+            "issueLink": "https://github.com/"
+        },
+        {
+            "domain": "facebook.com",
+            "categories": [4],
+            "issueLink": "https://github.com/"
+        },
+        {
+            "domain": "yandex.ru",
+            "categories": [4],
+            "issueLink": "https://github.com/"
+        },
+        {
+            "domain": "reddit.com",
+            "categories": [5],
+            "issueLink": "https://github.com/",
+            "paymentLink": "https://www.reddit.com/gold/about/"
+        },
+        {
+            "domain": "xda-developers.com",
+            "categories": [5],
+            "issueLink": "https://github.com/",
+            "paymentLink": "https://forum.xda-developers.com/ad-free/"
+        },
+    ]
+}

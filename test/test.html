@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title> Tests </title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        <script src="../node_modules/babel-polyfill/dist/polyfill.js"></script>
+        <script>
+            mocha.setup({
+              ui: 'bdd',
+              globals: ['__extends', '__assign', '__rest', '__decorate', '__param', '__metadata', '__awaiter', '__generator', '__exportStar', '__values', '__read', '__spread', '__await', '__asyncGenerator', '__asyncDelegator', '__asyncValues', 'GM_setValue', 'GM_getValue', 'hasCert']
+            });
+            var expect = chai.expect;
+        </script>
+
+        <script src="./tests.js"></script>
+
+        <script>
+            mocha.checkLeaks();
+            mocha.run();
+        </script>
+
+        <script src="../dist/userscript/userscript.user.js"></script>
+    </body>
+</html>
