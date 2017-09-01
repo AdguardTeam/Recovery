@@ -1,6 +1,7 @@
 import {$on, $delegate, qsa} from './helpers';
 import Utils from './utils';
 import Urls from '../common.urls.json';
+import Readability from 'readability';
 
 const ESCAPE_KEY = 27;
 
@@ -131,5 +132,24 @@ export default class View {
         $delegate(document, '.option', 'click', () => {
             handler();
         });
+    }
+
+    setReadMode() {
+        const loc = document.location;
+        const uri = {
+          spec: loc.href,
+          host: loc.host,
+          prePath: loc.protocol + '//' + loc.host,
+          scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+          pathBase: loc.protocol + '//' + loc.host + loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+        };
+        const article = new Readability(uri, document.cloneNode(true)).parse();
+
+        if(article && article.content) {
+            const adblock = document.createElement('div');
+            adblock.className = 'adblock-recovery-content';
+            adblock.innerHTML = article.content;
+            document.body.appendChild(adblock);
+        }
     }
 }

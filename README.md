@@ -16,11 +16,14 @@ For build userscript:
 
     $ npm run usr-build
 
-
 For build options page:
 
     $ npm run opt-build
 
-Update localization files (requires download-API file settings):
+Download localization files (requires download file settings `oneskeyapp.json`):
 
     $ npm run locales
+
+Upload localization file to oneskeyapp (_locales/en.json):
+
+    $ npm run upd-en

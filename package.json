@@ -4,14 +4,15 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "gulp build",
+    "start": "gulp userscript-dev",
     "opt": "gulp options-dev",
     "test": "mocha-phantomjs test/test.html",
     "ghtest": "gulp tests-gh-pages",
     "usr": "gulp userscript-dev",
     "opt-build": "NODE_ENV=production gulp options-dev",
     "usr-build": "NODE_ENV=production gulp userscript-dev",
-    "locales": "gulp download-localizations"
+    "locales": "gulp download-localizations",
+    "upd-en": "gulp upload-localization"
   },
   "author": "",
   "devDependencies": {
@@ -41,6 +42,7 @@
     "less-plugin-inline-urls": "^1.2.0",
     "mocha": "^3.4.2",
     "mocha-phantomjs": "^4.1.0",
+    "readability": "git+https://github.com/mozilla/readability.git",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
