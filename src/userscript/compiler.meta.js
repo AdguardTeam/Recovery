@@ -19,4 +19,5 @@
 // @grant GM_setValue
 // @grant GM_registerMenuCommand
 // @grant GM_openInTab
+// @grant GM_xmlhttpRequest
 // ==/UserScript==

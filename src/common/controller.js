@@ -6,6 +6,12 @@ import {optionsUrl} from '../options/js/options';
 export default class Controller {
     constructor(view) {
         this.view = view;
+        this.options = this.getOptions();
+        this.observer = null;
+        this.observerConfig = {
+            childList: true,
+            subtree: true
+        };
 
         const isOptionsPage = document.location.href.indexOf('/AntiAdblock/options/') >= 0;
 
@@ -13,7 +19,8 @@ export default class Controller {
             this.setOptions();
             view.pageOptionsChangeListener(this.setOptions.bind(this));
         } else {
-            this.pageRequirements(this.getOptions());
+            this.pageRequirements(this.options);
+            view.prepareReadView();
         }
 
         gm.registerMenu('AntiAdblock settings page', this.registerMenu);
@@ -21,7 +28,7 @@ export default class Controller {
 
     pageRequirements(options) {
         if (this.pageCheckRequirements(options)) {
-            this.view.checkLinks(options.preventAccess);
+            this.view.checkLinks(options, this.openInReadmod.bind(this));
             this.view.bindOpenItemCancel();
             this.mutationObserver();
         }
@@ -62,20 +69,15 @@ export default class Controller {
             window.MozMutationObserver;
 
         try {
-            let observer = new MutationObserver(function(mutations) {
+            _this.observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     if (mutation.type === 'childList') {
-                        _this.rebuild(mutation.target.classList);
+                        _this.rebuild(mutation.target.classList, mutation.addedNodes[0]);
                     }
                 });
             });
 
-            let config = {
-                childList: true,
-                subtree: true
-            };
-
-            observer.observe(document, config);
+            _this.observer.observe(document, _this.observerConfig);
         } catch (e) {
             console.log('MutationObserver is not available on this browser');
         }
@@ -84,9 +86,9 @@ export default class Controller {
     /* jshint ignore:start */
     @Throttle(500)
     /* jshint ignore:end */
-    rebuild(elClasses) {
-        if (!elClasses.contains('adguard-icon') && !elClasses.contains('adguard-icon-status')) {
-            this.view.checkLinks();
+    rebuild(elClasses, nodes) {
+        if (nodes && nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adguard-icon') && !elClasses.contains('adguard-icon-status')) {
+            this.view.checkLinks(this.options, this.openInReadmod.bind(this));
         }
     }
 
@@ -112,5 +114,22 @@ export default class Controller {
 
     registerMenu() {
         document.location.href = optionsUrl;
+    }
+
+    openInReadmod(el) {
+        const _this = this;
+        let url = decodeURIComponent(el.href);
+
+        gm.req({
+            method: 'GET',
+            url: url,
+            onload: function(response) {
+                let content = new DOMParser().parseFromString(response.responseText, 'text/html');
+                if(_this.observer) {
+                    _this.observer.disconnect();
+                }
+                _this.view.appendReadViewContent(content, _this.openInReadmod.bind(_this));
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-import {$on, $delegate, qsa} from './helpers';
+import {$on, $delegate, qsa, qs} from './helpers';
 import Utils from './utils';
 import Urls from '../common.urls.json';
 import Readability from 'readability';
@@ -10,8 +10,8 @@ const utils = new Utils();
 export default class View {
     constructor(template) {
         this.template = template;
-
-        this.linkElements = document.querySelectorAll('a');
+        this.readmode = null;
+        this.readmodeContent = null;
 
         $on(document, 'click', this.closeLinksStatus);
         $delegate(document, '.adguard-icon-status', 'click', ({target}) => {
@@ -23,19 +23,19 @@ export default class View {
         }, true);
     }
 
-    checkLinks(preventAccess) {
-        this.linkElements = document.querySelectorAll('a');
+    checkLinks(options, openInReadmod) {
+        this.linkElements = qsa('a');
 
         if(!this.linkElements.length) {
             return false;
         }
 
         this.linkElements.forEach(el => {
-            this.addIconToLinkElement(el, {preventAccess: preventAccess});
+            this.addIconToLinkElement(el, {preventAccess: options.preventAccess}, openInReadmod);
         });
     }
 
-    addIconToLinkElement(el, options) {
+    addIconToLinkElement(el, options, openInReadmod) {
         if (this.linkCheckRequirements(el)) {
             let adguard = document.createElement('div');
             let adguradIcon = document.createElement('div');
@@ -54,6 +54,12 @@ export default class View {
                 if(options.preventAccess) {
                     $on(el, 'click', this.preventDefault);
                 }
+
+                const openInReadmodBtn = qs('.status-icon-readmod', adguard);
+
+                $on(openInReadmodBtn, 'click', () => {
+                    openInReadmod(el);
+                });
             }
         }
     }
@@ -134,8 +140,8 @@ export default class View {
         });
     }
 
-    setReadMode() {
-        const loc = document.location;
+    setReadMode(url) {
+        const loc = url;
         const uri = {
           spec: loc.href,
           host: loc.host,
@@ -151,5 +157,39 @@ export default class View {
             adblock.innerHTML = article.content;
             document.body.appendChild(adblock);
         }
+    }
+
+    prepareReadView() {
+        this.readmode = document.createElement('div');
+        this.readmode.innerHTML = this.template.readmodeContent();
+        this.readmodeContent = qs('.adblock-recovery-readmode-content', this.readmode);
+        document.body.appendChild(this.readmode);
+
+        $delegate(this.readmode, '.adblock-recovery-readmode-close', 'click', () => {
+            this.readmode.classList.remove('adblock-recovery-readmode-active');
+        });
+    }
+
+    appendReadViewContent(content, handler) {
+        let elements = qsa('script, link, noscript, style, img', content);
+
+        for (let index = elements.length - 1; index >= 0; index--) {
+            elements[index].parentNode.removeChild(elements[index]);
+        }
+
+        let inlineStyles = qsa('[style]', content);
+
+        for (let index = inlineStyles.length - 1; index >= 0; index--) {
+            inlineStyles[index].removeAttribute('style');
+        }
+
+        this.readmodeContent.innerHTML = content.body.innerHTML;
+
+        $delegate(this.readmodeContent, 'a', 'click', (e) => {
+            e.preventDefault();
+            handler(e.target);
+        }, true);
+
+        this.readmode.classList.add('adblock-recovery-readmode-active');
     }
 }

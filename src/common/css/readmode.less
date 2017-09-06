@@ -1,0 +1,35 @@
+.adblock-recovery-readmode {
+    position: absolute;
+    z-index: 999999;
+    padding: 10px 10%;
+    width: 100%;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,.9);
+    font-size: 14pt!important;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .3s ease;
+
+    .adblock-recovery-readmode-close {
+        float: right!important;
+        outline: none!important;
+        border: none!important;
+        background: none!important;
+        font-size: 40px!important;
+        line-height: 40px!important;
+        cursor: pointer!important;
+        padding: 0!important;
+        margin: 0!important;
+    }
+
+    a {
+        background: none!important;
+    }
+}
+
+.adblock-recovery-readmode-active .adblock-recovery-readmode {
+    visibility: visible;
+    opacity: 1;
+}

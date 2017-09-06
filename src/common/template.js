@@ -42,6 +42,14 @@ export default class Template {
             </p>
             <p>${escapeForHTML(data.domain)} ${i18n('mechanisms')}:</p>
             <ul class="status-icon status-icon-${escapeForHTML(text.statusClass)}">${threats}</ul>
+            <button class="status-icon-readmod">${i18n('open_read_view')}</button>
+        </div>`;
+    }
+
+    readmodeContent() {
+        return `<div class="adblock-recovery-readmode">
+            <button class="adblock-recovery-readmode-close">×</button>
+            <div class="adblock-recovery-readmode-content"></div>
         </div>`;
     }
 }

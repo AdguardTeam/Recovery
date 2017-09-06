@@ -37,5 +37,8 @@
     },
     "disable_ads": {
         "message": "Disable ads"
+    },
+    "open_read_view": {
+        "message": "Open in read view"
     }
 }
