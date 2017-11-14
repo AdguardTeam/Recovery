@@ -1,12 +1,18 @@
 import gulp from 'gulp';
-import optionsDev from './tasks/options-dev';
-import userscriptDev from './tasks/userscript-dev';
+import options from './tasks/options';
+import popup from './tasks/popup';
+import extension from './tasks/extension';
 import testsGhPages from './tasks/tests-gh-pages';
 import downloadLocalizations from './tasks/download-localizations';
 import uploadLocalization from './tasks/upload-localization';
 
-gulp.task('options-dev', optionsDev);
-gulp.task('userscript-dev', userscriptDev);
+gulp.task('options', options);
+gulp.task('popup', popup);
+gulp.task('extension', extension);
 gulp.task('tests-gh-pages', testsGhPages);
 gulp.task('download-localizations', downloadLocalizations);
 gulp.task('upload-localization', uploadLocalization);
+
+const watch = () => gulp.watch('src/**/*.{jpg,png,svg,json,html,js,less}', gulp.series(options, popup, extension));
+
+gulp.task('watch', watch);

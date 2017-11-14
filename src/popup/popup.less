@@ -1,0 +1,118 @@
+@import "../common/css/variables";
+
+body {
+    margin: 0;
+}
+
+.adblock-recovery-popup {
+    width: 330px;
+    padding: 20px;
+    background: #fff;
+
+    .adblock-recovery-popup__options {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        vertical-align: middle;
+        margin: 0 10px;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        background: url('../common/img/settings.svg') no-repeat;
+        background-size: contain;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+            position: relative;
+            padding: 0 0 0 30px;
+            margin: 10px 0;
+        }
+
+        &.adblock-recovery-popup__status-icon {
+            li:before {
+                position: absolute;
+                content: ' ';
+                width: 15px;
+                height: 15px;
+                left: 0;
+                top: 0;
+                background: url('../common/img/ok.svg') no-repeat;
+                background-size: contain;
+            }
+
+            .adblock-recovery-status-tooltip {
+                display: inline-block;
+                vertical-align: middle;
+                width: 15px;
+                height: 15px;
+                margin: 0 5px;
+                opacity: 0.8;
+                background: url('../common/img/tooltip.svg') no-repeat;
+                background-size: contain;
+
+                .adblock-recovery-status-tooltip-text {
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    bottom: 0;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease-in-out;
+                    width: 150px;
+                    padding: 15px;
+                    background: #fff;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                }
+
+                &:hover {
+                    opacity: 1;
+
+                    .adblock-recovery-status-tooltip-text {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+            }
+
+            &.status-icon-warning {
+                li:before {
+                    background: url('../common/img/not-ok.svg') no-repeat;
+                    background-size: contain;
+                }
+            }
+        }
+    }
+
+    .adblock-recovery-popup__details {
+        background: @green;
+        border: none;
+        padding: 10px 15px;
+        margin: 0;
+        outline: none;
+        color: #fff;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .adblock-recovery-popup__nodata {
+        display: none;
+    }
+
+    &.no-data {
+        .adblock-recovery-popup__data {
+            display: none;
+        }
+
+        .adblock-recovery-popup__nodata {
+            display: block;
+        }
+    }
+}

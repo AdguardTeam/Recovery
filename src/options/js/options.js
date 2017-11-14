@@ -1,16 +1,16 @@
-export const optionsUrl = 'https://4-life.github.io/AntiAdblock/options/';
-
-export const options = {
+export const defaultOptions = {
     warningIconsNearLinks: true,
     preventAccess: true,
     tryToCircumvent: true,
-    google: true,
-    bing: true,
-    yahoo: true,
-    duckduckgo: true,
-    facebook: true,
-    twitter: true,
-    googlenews: true,
-    yahooNews: true,
-    reddit: true
+    urls: [
+        {name: 'google', show: true, host: 'www.google.'},
+        {name: 'bing', show: true, host: 'www.bing.com'},
+        {name: 'yahoo', show: true, host: 'search.yahoo.com'},
+        {name: 'duckduckgo', show: true, host: 'duckduckgo.com'},
+        {name: 'facebook', show: true, host: 'www.facebook.com'},
+        {name: 'twitter', show: true, host: 'twitter.com'},
+        {name: 'googlenews', show: true, host: 'news.google.'},
+        {name: 'yahooNews', show: true, host: 'https://www.yahoo.com/news/'},
+        {name: 'reddit', show: true, host: 'www.reddit.com'}
+    ]
 };

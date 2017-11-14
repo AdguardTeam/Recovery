@@ -1,12 +1,12 @@
 import {qs, qsa, $delegate} from '../../common/helpers';
-import {i18n} from './localization';
-import {options} from './options';
+import {i18n} from '../../common/localization';
+import {defaultOptions} from './options';
 
 export default class View {
     constructor() {
         this.options = {};
 
-        for (let option in options) {
+        for (let option in defaultOptions) {
             this.options[option] = qs('#' + option);
         }
 

@@ -1,0 +1,229 @@
+.adblock-recovery {
+    all: initial;
+    position: absolute!important;
+    width: 15px!important;
+    height: 15px!important;
+    display: inline-block!important;
+    margin: 1px!important;
+    vertical-align: middle!important;
+    z-index: 10!important;
+
+    .adblock-recovery-status {
+        all: initial;
+        display: inline-block!important;
+        width: 15px!important;
+        height: 15px!important;
+        vertical-align: middle!important;
+        cursor: pointer!important;
+        background: url('../img/ok.svg') no-repeat!important;
+        background-size: contain!important;
+        opacity: .5!important;
+
+        &.adblock-recovery-status-1,
+        &.adblock-recovery-status-2,
+        &.adblock-recovery-status-4 {
+            background: url('../img/not-ok.svg') no-repeat!important;
+            background-size: contain!important
+        }
+
+        &:hover, &.adblock-recovery-status-show {
+            opacity: 1!important;
+        }
+
+        .adblock-recovery-status-iframe {
+            margin: -13px 0 0 15px!important;
+        }
+    }
+}
+
+.adblock-recovery-status-body {
+    margin: 0;
+    font-family: 'Tahoma', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 16px;
+
+    ::selection {
+        background: transparent;
+    }
+}
+
+.adblock-recovery-status-content {
+    position: absolute;
+    width: 300px;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.3) -1px 2px 4px;
+    border-radius: 4px;
+    padding: 20px 15px 20px 25px;
+    top: 0;
+    left: 10px;
+    cursor: default;
+    font-size: 18px;
+
+    .adguard-status-recovery {
+        font-weight: 900;
+
+        .adblock-recovery-status-settings {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            vertical-align: middle;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            background: url('../img/settings.svg') no-repeat;
+            background-size: contain;
+        }
+    }
+
+    .status {
+        font-size: 22px;
+        margin: 20px 0;
+        color: @green;
+        font-weight: 900;
+
+        &.status-warning {
+            color: @red;
+        }
+    }
+
+    p,i {
+        font-family: 'Tahoma', sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 200;
+        line-height: 16px;
+        color: #333;
+    }
+
+    p {
+        display: block;
+        padding: 0;
+        margin: 10px 0;
+        word-break: break-word;
+        white-space: normal;
+    }
+
+    i {
+        padding: 0;
+        margin: 0;
+        font-style: italic;
+    }
+
+    &:before,
+    &:after {
+        position: absolute;
+        z-index: 101;
+        top: 20px;
+        left: -5px;
+        width: 10px;
+        height: 10px;
+        margin-top: -5px;
+        content: ' ';
+        transform: rotate(45deg);
+        background: rgb(255, 255, 255);
+    }
+
+    &:after {
+        z-index: 100;
+        box-shadow: rgba(0, 0, 0, 0.3) -1px 2px 4px;
+    }
+
+    p {
+        width: 100%;
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        li {
+            position: relative;
+            padding: 0 0 0 30px;
+            margin: 10px 0;
+        }
+
+        &.status-icon {
+            li:before {
+                position: absolute;
+                content: ' ';
+                width: 15px;
+                height: 15px;
+                left: 0;
+                top: 0;
+                background: url('../img/ok.svg') no-repeat;
+                background-size: contain;
+            }
+
+            .adblock-recovery-status-tooltip {
+                display: inline-block;
+                vertical-align: middle;
+                width: 15px;
+                height: 15px;
+                margin: 0 5px;
+                opacity: .8;
+                background: url('../img/tooltip.svg') no-repeat;
+                background-size: contain;
+
+                .adblock-recovery-status-tooltip-text {
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    bottom: 0;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all .3s  ease-in-out;
+                    width: 150px;
+                    padding: 15px;
+                    background: #fff;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                }
+
+                &:hover {
+                    opacity: 1;
+
+                    .adblock-recovery-status-tooltip-text {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+            }
+
+            &.status-icon-warning {
+                li:before {
+                    background: url('../img/not-ok.svg') no-repeat;
+                    background-size: contain;
+                }
+            }
+        }
+    }
+
+    .adblock-recovery-status-close {
+        float: right;
+        outline: none;
+        border: none;
+        background: none;
+        font-size: 24px;
+        line-height: 24px;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+    }
+
+    .status-icon-readmod {
+        background: @green;
+        border: none;
+        padding: 10px 15px;
+        margin: 0;
+        outline: none;
+        color: #fff;
+        cursor: pointer;
+        &:hover {
+            opacity: .9;
+        }
+    }
+}

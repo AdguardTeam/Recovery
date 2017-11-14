@@ -1,195 +1,100 @@
-import {$on, $delegate, qsa, qs} from './helpers';
-import Utils from './utils';
-import Urls from '../common.urls.json';
-import Readability from 'readability';
-
-const ESCAPE_KEY = 27;
-
-const utils = new Utils();
+/* global ADBLOCKRECOVERYSTYLE */
+import {$on, $delegate, qsa} from './helpers';
+import Urls from '../data/urls.json';
+import logs from './logs';
 
 export default class View {
     constructor(template) {
         this.template = template;
-        this.readmode = null;
-        this.readmodeContent = null;
 
         $on(document, 'click', this.closeLinksStatus);
-        $delegate(document, '.adguard-icon-status', 'click', ({target}) => {
+        $delegate(document, '.adblock-recovery-status', 'click', ({target}) => {
             this.closeLinksStatus();
-            this.openLinkStatus(target);
+            this.showLinkStatus(target);
         }, true);
-        $delegate(document, '.adguard-icon-status-close', 'click', () => {
+        $delegate(document, '.adblock-recovery-status-close', 'click', () => {
             this.closeLinksStatus();
         }, true);
     }
 
-    checkLinks(options, openInReadmod) {
-        this.linkElements = qsa('a');
-
-        if(!this.linkElements.length) {
-            return false;
-        }
-
-        this.linkElements.forEach(el => {
-            this.addIconToLinkElement(el, {preventAccess: options.preventAccess}, openInReadmod);
-        });
-    }
-
-    addIconToLinkElement(el, options, openInReadmod) {
-        if (this.linkCheckRequirements(el)) {
-            let adguard = document.createElement('div');
-            let adguradIcon = document.createElement('div');
-            adguard.className = 'adguard-icon';
-            adguard.setAttribute('data-href', el.hostname);
-            adguradIcon.className = 'adguard-icon-status';
-
-            adguard.appendChild(adguradIcon);
-
-            let status = Urls.data.find(this.compare.bind(this, el.hostname, adguradIcon));
-
-            if (status) {
-                el.parentNode.insertBefore(adguard, el.nextSibling);
-                this.showLinkStatus(adguradIcon, status);
-
-                if(options.preventAccess) {
-                    $on(el, 'click', this.preventDefault);
-                }
-
-                const openInReadmodBtn = qs('.status-icon-readmod', adguard);
-
-                $on(openInReadmodBtn, 'click', () => {
-                    openInReadmod(el);
-                });
-            }
-        }
-    }
-
-    linkCheckRequirements(el) {
-        let url = decodeURIComponent(el.hostname);
-
-        switch (false) {
-            case utils.validateUrlString(url):
-                return false;
-
-            case utils.validateUrlIsExternal(url):
-                return false;
-
-            case utils.validateLinkIsNotEmpty(el):
-                return false;
-
-            case utils.validateLinkIsNotBgImage(el):
-                return false;
-
-            case utils.validateLinkIsNotTagImage(el):
-                return false;
-
-            case !utils.validateLinkAlreadyChecked(el):
-                return false;
-            default:
-                return true;
-        }
-    }
-
-    compare(href, adguradIcon, link) {
-        if (href.indexOf(link.domain) > -1 && link.categories.length) {
-            link.categories.forEach((lvl) => {
-                adguradIcon.classList.add('adguard-status-' + lvl);
-            });
-
-            return link;
-        } else {
-            adguradIcon.classList.add('adguard-icon-status-ok');
-        }
-    }
-
-    openLinkStatus(target) {
-        target.classList.add('adguard-icon-status-show');
-        qsa('.adguard-icon').forEach((el) => el.style = 'z-index:0;');
+    /**
+     * opening popup with information about the link. `z-index:0` style is necessary for the icons to be always under the popup
+     *
+     * @param {Object} target   current link element
+     */
+    showLinkStatus(target) {
+        const _this = this;
+        target.classList.add('adblock-recovery-status-show');
+        qsa('.adblock-recovery').forEach((el) => el.style = 'z-index:0!important;');
         target.parentNode.style = '';
-    }
 
-    showLinkStatus(target, data) {
-        $on(target, 'click', this.stopPropagation);
-        target.innerHTML = this.template.linkStatus(data);
-    }
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('class', 'adblock-recovery-status-iframe');
+        iframe.setAttribute('frameBorder', 0);
+        iframe.setAttribute('width', 400);
+        iframe.setAttribute('height', 300);
+        iframe.setAttribute('allowTransparency', 'true');
 
-    closeLinksStatus() {
-        qsa('.adguard-icon').forEach((el) => el.style = '');
-        qsa('.adguard-icon-status-show').forEach((e) => e.classList.remove('adguard-icon-status-show'));
-    }
+        let iframeAlreadyLoaded = false;
 
-    bindOpenItemCancel() {
-        $on(document, 'keydown', ({keyCode}) => {
-            if (keyCode === ESCAPE_KEY) {
-                this.closeLinksStatus();
+        iframe.onload = function() {
+            if (iframeAlreadyLoaded) {
+                //IE calls load each time when we use document.close
+                return;
             }
-        });
-    }
+            iframeAlreadyLoaded = true;
+            let status = Urls.data.find((link) => {
+                return target.parentNode.getAttribute('data-href').indexOf(link.domain) >= 0;
+            });
+            const content = _this.template.linkStatus(status);
+            _this.appendContentToIframe(iframe, content);
 
-    stopPropagation(e) {
-        e.stopPropagation();
-    }
-
-    preventDefault(e) {
-        e.preventDefault();
-    }
-
-    pageOptionsChangeListener(handler) {
-        $delegate(document, '.option', 'click', () => {
-            handler();
-        });
-    }
-
-    setReadMode(url) {
-        const loc = url;
-        const uri = {
-          spec: loc.href,
-          host: loc.host,
-          prePath: loc.protocol + '//' + loc.host,
-          scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-          pathBase: loc.protocol + '//' + loc.host + loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+            $delegate(document, '.adblock-recovery-status-close', 'click', () => {
+                _this.closeLinksStatus();
+            }, true);
         };
-        const article = new Readability(uri, document.cloneNode(true)).parse();
 
-        if(article && article.content) {
-            const adblock = document.createElement('div');
-            adblock.className = 'adblock-recovery-content';
-            adblock.innerHTML = article.content;
-            document.body.appendChild(adblock);
+        target.appendChild(iframe);
+    }
+
+    /**
+     * write the content in the iframe
+     *
+     * @param {Object} iframe   current iframe
+     * @param {String} content   content
+     */
+    appendContentToIframe(iframe, content) {
+        const _this = this;
+        try {
+            const doc = iframe.contentDocument;
+
+            // ADBLOCKRECOVERYSTYLE - global styles string which created by the gulp
+            const style = '<style type="text/css">' + ADBLOCKRECOVERYSTYLE + '</style>';
+            doc.open();
+            doc.write('<html><head>' + style + '</head><body class="adblock-recovery-status-body">' + content + '</body></html>');
+            doc.close();
+            iframe.style.setProperty('display', 'block', 'important');
+
+            $delegate(doc, '.adblock-recovery-status-close', 'click', () => {
+                _this.closeLinksStatus();
+            }, true);
+
+            $delegate(doc, '.adblock-recovery-status-settings', 'click', () => {
+                return;
+            }, true);
+        } catch (ex) {
+            logs.error(ex);
         }
     }
 
-    prepareReadView() {
-        this.readmode = document.createElement('div');
-        this.readmode.innerHTML = this.template.readmodeContent();
-        this.readmodeContent = qs('.adblock-recovery-readmode-content', this.readmode);
-        document.body.appendChild(this.readmode);
-
-        $delegate(this.readmode, '.adblock-recovery-readmode-close', 'click', () => {
-            this.readmode.classList.remove('adblock-recovery-readmode-active');
+    /**
+     * closing popup with information about the link and resetting inline `z-index:0` style
+     */
+    closeLinksStatus() {
+        qsa('.adblock-recovery').forEach((el) => el.style = '');
+        qsa('.adblock-recovery-status-show').forEach((e) => {
+            e.classList.remove('adblock-recovery-status-show');
+            e.innerHTML = '';
         });
-    }
-
-    appendReadViewContent(content, handler) {
-        let elements = qsa('script, link, noscript, style, img', content);
-
-        for (let index = elements.length - 1; index >= 0; index--) {
-            elements[index].parentNode.removeChild(elements[index]);
-        }
-
-        let inlineStyles = qsa('[style]', content);
-
-        for (let index = inlineStyles.length - 1; index >= 0; index--) {
-            inlineStyles[index].removeAttribute('style');
-        }
-
-        this.readmodeContent.innerHTML = content.body.innerHTML;
-
-        $delegate(this.readmodeContent, 'a', 'click', (e) => {
-            e.preventDefault();
-            handler(e.target);
-        }, true);
-
-        this.readmode.classList.add('adblock-recovery-readmode-active');
     }
 }

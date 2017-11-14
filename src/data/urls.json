@@ -32,9 +32,9 @@
         },
         {
             "domain": "xda-developers.com",
-            "categories": [5],
+            "categories": [4, 5],
             "issueLink": "https://github.com/",
             "paymentLink": "https://forum.xda-developers.com/ad-free/"
-        },
+        }
     ]
 }

@@ -12,10 +12,12 @@
         <script>
             mocha.setup({
               ui: 'bdd',
-              globals: ['__extends', '__assign', '__rest', '__decorate', '__param', '__metadata', '__awaiter', '__generator', '__exportStar', '__values', '__read', '__spread', '__await', '__asyncGenerator', '__asyncDelegator', '__asyncValues', 'GM_setValue', 'GM_getValue', 'hasCert']
+              globals: ['__extends', '__assign', '__rest', '__decorate', '__param', '__metadata', '__awaiter', '__generator', '__exportStar', '__values', '__read', '__spread', '__await', '__asyncGenerator', '__asyncDelegator', '__asyncValues', 'hasCert', 'ADBLOCKRECOVERYSTYLE']
             });
             var expect = chai.expect;
         </script>
+
+        <script src="../dist/userscript.js"></script>
 
         <script src="./tests.js"></script>
 
@@ -23,7 +25,5 @@
             mocha.checkLeaks();
             mocha.run();
         </script>
-
-        <script src="../dist/userscript/userscript.user.js"></script>
     </body>
 </html>

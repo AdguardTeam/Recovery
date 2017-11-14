@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import downloadStream from 'gulp-download-stream';
 import md5 from 'gulp-hash-creator';
-import oneskeyapp from '../oneskeyapp';
+import oneskyapp from '../oneskyapp';
 
 const paths = {
     src: 'src/_locales/',
@@ -19,7 +19,7 @@ function prepare() {
         sourceFile: 'en.json'
     };
 
-    options = Object.assign(options, oneskeyapp);
+    options = Object.assign(options, oneskyapp);
 
     let urls = [];
 

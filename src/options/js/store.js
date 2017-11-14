@@ -1,4 +1,4 @@
-import {options} from './options';
+import {defaultOptions} from './options';
 
 export default class Store {
     constructor(name, callback) {
@@ -10,7 +10,7 @@ export default class Store {
             if (data) {
                 return JSON.parse(data);
             } else {
-                return options;
+                return defaultOptions;
             }
         };
 

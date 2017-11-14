@@ -6,7 +6,7 @@
         "message": "site you are trying to navigate uses anti-blocking mechanisms"
     },
     "adblock_recovery": {
-        "message": "Adblock recovery"
+        "message": "Adblock Recovery"
     },
     "adblock_wall_description": {
         "message": "Blocking access to content description"
@@ -38,7 +38,43 @@
     "disable_ads": {
         "message": "Disable ads"
     },
-    "open_read_view": {
-        "message": "Open in read view"
+    "open_details": {
+        "message": "Open details"
+    },
+    "view_details": {
+        "message": "View details"
+    },
+    "no_data": {
+        "message": "No data in the current tab"
+    },
+    "website_using_anti_adblocking_techniques": {
+        "message": "This website is engaged in using anti-adblocking techniques:"
+    },
+    "no_information_about_website": {
+        "message": "No information about website"
+    },
+    "description": {
+        "message": "Protect and respect"
+    },
+    "footer_homepage": {
+        "message": "Homepage"
+    },
+    "footer_privacy_policy": {
+        "message": "Privacy Policy"
+    },
+    "footer_eula": {
+        "message": "EULA"
+    },
+    "footer_powered_by": {
+        "message": "Powered by"
+    },
+    "options_title": {
+        "message": "Settings"
+    },
+    "options_header": {
+        "message": "Settings"
+    },
+    "options_settings_filters": {
+        "message": "Filters"
     }
 }

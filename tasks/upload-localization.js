@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import md5 from 'gulp-hash-creator';
-import oneskeyapp from '../oneskeyapp';
+import oneskyapp from '../oneskyapp';
 import fs from 'fs';
 import request from 'request';
 
@@ -17,13 +17,13 @@ function hashString(stringContent) {
 function prepare() {
     const timestamp = Math.round(new Date().getTime() / 1000);
     const formData = {
-        file: fs.createReadStream(path.src),
-        file_format: 'HIERARCHICAL_JSON',
-        locale: 'en',
-        is_keeping_all_strings: 'false',
-        api_key: oneskeyapp.apiKey,
-        dev_hash: hashString(timestamp + oneskeyapp.secretKey),
-        timestamp: timestamp
+        'file': fs.createReadStream(path.src),
+        'file_format': 'HIERARCHICAL_JSON',
+        'locale': 'en',
+        'is_keeping_all_strings': 'false',
+        'api_key': oneskyapp.apiKey,
+        'dev_hash': hashString(timestamp + oneskyapp.secretKey),
+        'timestamp': timestamp
     };
 
     return formData;
@@ -33,7 +33,7 @@ function uploadf() {
     const data = prepare();
 
     return request.post({
-        url: oneskeyapp.url + oneskeyapp.projectId + '/files',
+        url: oneskyapp.url + oneskyapp.projectId + '/files',
         formData: data
     }, function optionalCallback(err, httpResponse, body) {
         if (err) {

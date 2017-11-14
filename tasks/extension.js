@@ -1,6 +1,5 @@
 import del from 'del';
 import gulp from 'gulp';
-import browserSync from 'browser-sync';
 import browserify from 'browserify';
 import babelify from 'babelify';
 import source from 'vinyl-source-stream';
@@ -13,24 +12,22 @@ import cleanCSS from 'gulp-clean-css';
 import gulpCss2js from 'gulp-css2js';
 import concat from 'gulp-concat';
 
-const server = browserSync.create();
-
 const paths = {
     src: 'src/common/**/*.{jpg,png,svg,json,html,js,less}',
     scripts: {
-        entry: 'src/userscript.main.js',
+        entry: 'src/extension.js',
         src: 'src/common/js/**/*.js',
-        dest: 'dist/userscript/',
-        name: 'userscript.user.js'
+        name: 'userscript.js'
     },
     styles: {
         entry: 'src/common/css/style.less',
-        src: 'src/common/css/**/*.less',
-        dest: 'dist/userscript/'
-    }
+        src: 'src/common/css/**/*.less'
+    },
+    dest: 'dist/',
+    manifest: 'src/manifest.json'
 };
 
-const clean = () => del(['./dist/userscript/style.**']);
+const clean = () => del(['./dist/style.**']);
 
 const scripts = () => {
     return browserify().transform(babelify, {
@@ -43,7 +40,7 @@ const scripts = () => {
         .bundle()
         .pipe(source(paths.scripts.name))
         .pipe(buffer())
-        .pipe(gulp.dest(paths.scripts.dest));
+        .pipe(gulp.dest(paths.dest));
 };
 
 function styles() {
@@ -57,43 +54,27 @@ function styles() {
         }))
         .pipe(inlineAssets())
         .pipe(cleanCSS())
-        .pipe(gulp.dest(paths.styles.dest));
+        .pipe(gulp.dest(paths.dest));
 }
 
 function cssToJs() {
-    return gulp.src('./dist/userscript/style.css')
-        .pipe(gulpCss2js())
-        .pipe(gulp.dest('./dist/userscript/'));
+    return gulp.src('./dist/style.css')
+        .pipe(gulpCss2js({
+            prefix: 'var ADBLOCKRECOVERYSTYLE = "',
+            suffix: '";\n'
+        }))
+        .pipe(gulp.dest('./dist/'));
 }
 
 function userscriptConcat() {
-    return gulp.src(['./src/userscript/compiler.meta.js', './dist/userscript/style.js', './dist/userscript/userscript.user.js'])
-      .pipe(concat('userscript.user.js'))
-      .pipe(gulp.dest('./dist/userscript/'));
+    return gulp.src(['./dist/style.js', './dist/userscript.js'])
+      .pipe(concat(paths.scripts.name))
+      .pipe(gulp.dest('./dist/'));
 }
 
-function reload(done) {
-    server.reload();
-    done();
-}
+const manifest = () => {
+    return gulp.src(paths.manifest)
+        .pipe(gulp.dest(paths.dest));
+};
 
-function serve(done) {
-    server.init({
-        server: {
-            baseDir: './dist/userscript/'
-        }
-    });
-    done();
-}
-
-const watch = () => gulp.watch(paths.src, gulp.series(scripts, styles, cssToJs, userscriptConcat, clean, reload));
-
-let build;
-
-if(process.env.NODE_ENV === 'production') {
-    build = gulp.series(scripts, styles, cssToJs, userscriptConcat, clean);
-}else {
-    build = gulp.series(scripts, styles, cssToJs, userscriptConcat, clean, serve, watch);
-}
-
-export default build;
+export default gulp.series(manifest, scripts, styles, cssToJs, userscriptConcat, clean);

@@ -3,6 +3,24 @@ const languages = {
     ru: require('../_locales/ru.json')
 };
 
-const current = 'en';
+let currentLocale, locale;
 
-export const i18n = s => languages[current][s] && languages[current][s].message ? languages[current][s].message : s;
+if (navigator.languages) {
+    locale = navigator.languages[0];
+} else if (navigator.language) {
+    locale = navigator.language.split('-')[0];
+}
+
+if (languages[locale]) {
+    currentLocale = locale;
+} else {
+    currentLocale = 'en';
+}
+
+export const i18n = key => {
+    if (languages[currentLocale][key] && languages[currentLocale][key].message) {
+        return languages[currentLocale][key].message;
+    } else {
+        return key;
+    }
+};

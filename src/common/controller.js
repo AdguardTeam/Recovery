@@ -1,65 +1,50 @@
-import {Throttle} from 'lodash-decorators/throttle'; // jshint ignore:line
-import {qsa, gm} from './helpers';
-import {options} from '../options/js/options';
-import {optionsUrl} from '../options/js/options';
+import _ from 'lodash';
+import {gm} from './gm-api';
+import {defaultOptions} from '../options/js/options';
+import Urls from '../data/urls.json';
 
 export default class Controller {
-    constructor(view) {
+    constructor(logs, view, highlightlinks) {
         this.view = view;
-        this.options = this.getOptions();
+        this.highlightlinks = highlightlinks;
+        this.logs = logs;
+        this.options = this.getOptions() || defaultOptions;
         this.observer = null;
-        this.observerConfig = {
-            childList: true,
-            subtree: true
-        };
 
-        const isOptionsPage = document.location.href.indexOf('/AntiAdblock/options/') >= 0;
+        this.check = this.checkLink.bind(this);
 
-        if (isOptionsPage) {
-            this.setOptions();
-            view.pageOptionsChangeListener(this.setOptions.bind(this));
-        } else {
-            this.pageRequirements(this.options);
-            view.prepareReadView();
-        }
+        this.init();
 
-        gm.registerMenu('AntiAdblock settings page', this.registerMenu);
+        this.mutationObserver();
     }
 
-    pageRequirements(options) {
-        if (this.pageCheckRequirements(options)) {
-            this.view.checkLinks(options, this.openInReadmod.bind(this));
-            this.view.bindOpenItemCancel();
-            this.mutationObserver();
+    init() {
+        if (this.pageCheckRequirements(this.options)) {
+            this.highlightlinks.show(this.check);
         }
     }
 
+    /**
+     * Checking the page for compliance with settings Adblock Recovery
+     *
+     * @param  {Object} opt   options object
+     * @return {Boolean}      corresponds or not
+     */
     pageCheckRequirements(opt) {
         if (!opt.warningIconsNearLinks) {
             return false;
-        }else if (opt.google && document.location.host.indexOf('www.google.') === 0) {
-            return true;
-        } else if (opt.bing && document.location.host.indexOf('www.bing.com') === 0) {
-            return true;
-        } else if (opt.yahoo && document.location.host.indexOf('search.yahoo.com') === 0) {
-            return true;
-        } else if (opt.duckduckgo && document.location.host.indexOf('duckduckgo.com') === 0) {
-            return true;
-        } else if (opt.facebook && document.location.host.indexOf('www.facebook.com') === 0) {
-            return true;
-        } else if (opt.twitter && document.location.host.indexOf('twitter.com') === 0) {
-            return true;
-        } else if (opt.googlenews && document.location.host.indexOf('news.google.') === 0) {
-            return true;
-        } else if (opt.yahooNews && document.location.href.indexOf('https://www.yahoo.com/news/') === 0) {
-            return true;
-        } else if (opt.reddit && document.location.host.indexOf('www.reddit.com') === 0) {
-            return true;
-        } else {
-            return false;
         }
+
+        return opt.urls.some((url) => {
+            if (url.show && document.location.host.indexOf(url.host) === 0) {
+                return true;
+            }
+        });
     }
 
+    /**
+     * DOM change event listener
+     */
     mutationObserver() {
         const _this = this;
 
@@ -68,68 +53,48 @@ export default class Controller {
             window.WebKitMutationObserver ||
             window.MozMutationObserver;
 
+        const throttleRebuild = _.throttle(this.rebuild, 500);
+
         try {
-            _this.observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
+            _this.observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
                     if (mutation.type === 'childList') {
-                        _this.rebuild(mutation.target.classList, mutation.addedNodes[0]);
+                        throttleRebuild(_this, mutation.target.classList, mutation.addedNodes[0]);
                     }
                 });
             });
 
-            _this.observer.observe(document, _this.observerConfig);
-        } catch (e) {
-            console.log('MutationObserver is not available on this browser');
-        }
-    }
-
-    /* jshint ignore:start */
-    @Throttle(500)
-    /* jshint ignore:end */
-    rebuild(elClasses, nodes) {
-        if (nodes && nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adguard-icon') && !elClasses.contains('adguard-icon-status')) {
-            this.view.checkLinks(this.options, this.openInReadmod.bind(this));
-        }
-    }
-
-    setOptions() {
-        let data = localStorage.getItem('anti-adblock-store');
-
-        if (!data) {
-            data = {};
-            const elements = qsa('label.option');
-            elements.forEach(el => {
-                data[el.id] = el.children[el.id].checked;
+            _this.observer.observe(document, {
+                childList: true,
+                subtree: true
             });
-        } else {
-            data = JSON.parse(data);
+        } catch (e) {
+            this.logs.error('MutationObserver is not available on this browser');
         }
+    }
 
-        gm.set('anti-adblock-store', data);
+    /**
+     * Function for highlighting links when changing the DOM. Lodash Throttle with 500 ms for better performance
+     *
+     * @param  {Object} elClasses   list of element classes
+     * @param  {Object} nodes       changeable DOM node
+     */
+    rebuild(_this, elClasses, nodes) {
+        if (nodes && nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adblock-recovery') && !elClasses.contains('adblock-recovery-status')) {
+            _this.init();
+        }
+    }
+
+    /**
+     * Checking the link for compliance with settings Adblock Recovery
+     *
+     * @param  {String} url    url link
+     */
+    checkLink(url) {
+        return Urls.data.find((link) => url.indexOf(link.domain) >= 0);
     }
 
     getOptions() {
-        return gm.get('anti-adblock-store', options);
-    }
-
-    registerMenu() {
-        document.location.href = optionsUrl;
-    }
-
-    openInReadmod(el) {
-        const _this = this;
-        let url = decodeURIComponent(el.href);
-
-        gm.req({
-            method: 'GET',
-            url: url,
-            onload: function(response) {
-                let content = new DOMParser().parseFromString(response.responseText, 'text/html');
-                if(_this.observer) {
-                    _this.observer.disconnect();
-                }
-                _this.view.appendReadViewContent(content, _this.openInReadmod.bind(_this));
-            }
-        });
+        return gm.get('adblock-recovery-store', defaultOptions);
     }
 }
