@@ -32,16 +32,14 @@ export default class Template {
 
         return `<div class="adblock-recovery-status-content">
             <button class="adblock-recovery-status-close">×</button>
-            <span class="adguard-status-recovery">
+            <h1 class="adguard-status-recovery">
                 ${i18n('adblock_recovery')}
-                <button class="adblock-recovery-status-settings"></button>
-            </span>
+            </h1>
             <p class="status status-${escapeForHTML(text.statusClass)}">
                 ${i18n('status')}: ${escapeForHTML(text.status)}
             </p>
             <p>${escapeForHTML(data.domain)} ${i18n('mechanisms')}:</p>
             <ul class="status-icon status-icon-${escapeForHTML(text.statusClass)}">${threats}</ul>
-            <button class="status-icon-readmod">${i18n('open_details')}</button>
         </div>`;
     }
 }

@@ -1,10 +1,10 @@
 /* global chrome */
 
-import {qs, qsa} from '../common/helpers';
-import categories from '../data/categories.json';
-import {categoriesID} from '../data/categories';
-import {i18n} from '../common/localization';
-import logs from '../common/logs';
+import {qs, qsa} from '../../common/helpers';
+import categories from '../../data/categories.json';
+import {categoriesID} from '../../data/categories';
+import {i18n} from '../../common/localization';
+import logs from '../../common/logs';
 
 const log = new logs();
 const sitename = qs('.adblock-recovery-popup__sitename');
@@ -25,10 +25,15 @@ const getSiteData = () => {
 
             if (lastError) {
                 log.error(lastError.message);
+                noData(tabs[0].url);
                 return;
             }
 
-            if (response && response.done && response.data) {
+            if (response && response.done) {
+                sitename.innerText = response.host;
+            }
+
+            if (response.data) {
                 appendData(response);
             } else {
                 noData();
@@ -49,7 +54,6 @@ const localization = () => {
  * @param  {Object} website   website data
  */
 const appendData = (website) => {
-    sitename.innerText = website.host;
     popup.classList.remove('no-data');
 
     if (!website.data) {
@@ -82,8 +86,12 @@ const appendData = (website) => {
     techniquesList.innerHTML = `<ul class="adblock-recovery-popup__status-icon ${text.statusClass}">${threats}</ul>`;
 };
 
-const noData = () => {
+const noData = (url) => {
     popup.classList.add('no-data');
+
+    if (url) {
+        sitename.innerText = url;
+    }
 };
 
 optionsBtn.addEventListener('click', function() {

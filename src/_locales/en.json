@@ -45,7 +45,7 @@
         "message": "View details"
     },
     "no_data": {
-        "message": "No data in the current tab"
+        "message": "No known threats"
     },
     "website_using_anti_adblocking_techniques": {
         "message": "This website is engaged in using anti-adblocking techniques:"

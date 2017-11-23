@@ -1,49 +1,66 @@
-import {defaultOptions} from './options';
+/* global chrome */
+import {commonOptions} from './options';
 
 export default class Store {
-    constructor(name, callback) {
+    constructor() {
         const localStorage = window.localStorage;
 
-        this.getLocalStorage = () => {
-            const data = localStorage.getItem(name);
+        this.chrome = typeof(chrome) === 'undefined' ? null : chrome;
 
-            if (data) {
-                return JSON.parse(data);
+        // jshint ignore: start
+        this.getData = async() => {
+            const options = await this.getFromStorageAsync();
+
+            if (options && Object.keys(options).length !== 0) {
+                return options;
             } else {
-                return defaultOptions;
+                return commonOptions;
             }
-        };
+        }
+        this.updateData = async(id, value) => {
+            let options = await this.getFromStorageAsync();
+
+            if (options && Object.keys(options).length === 0) {
+                options = commonOptions;
+            }
+
+            options[id].show = !value;
+
+            this.setLocalStorage(options);
+        }
+        // jshint ignore: end
 
         this.setLocalStorage = (data) => {
-            localStorage.setItem(name, JSON.stringify(data));
+            if (this.chrome) {
+                this.chrome.storage.sync.set({'data': JSON.stringify(data)});
+            } else {
+                localStorage.setItem('data', JSON.stringify(data));
+            }
         };
-
-        if (callback) {
-            callback();
-        }
     }
 
-    getOptions(callback) {
-        callback(this.getLocalStorage());
+    getFromStorageAsync() {
+        const _this = this;
+        return new Promise(resolve => {
+            if (!_this.chrome) {
+                let data = localStorage.getItem('data');
+
+                if (data) {
+                    resolve(JSON.parse(data));
+                } else {
+                    resolve(null);
+                }
+            }
+
+            _this.chrome.storage.sync.get('data', (storageData) => {
+                if (storageData && storageData.data) {
+                    storageData = JSON.parse(storageData.data);
+                }
+
+                resolve(storageData);
+            });
+        });
     }
 
-    update(options, callback) {
-        this.setLocalStorage(options);
 
-        if (callback) {
-            callback();
-        }
-    }
-
-    updateOption(option, value, callback) {
-        const options = this.getLocalStorage();
-
-        options[option] = !value;
-
-        this.setLocalStorage(options);
-
-        if (callback) {
-            callback(options);
-        }
-    }
 }

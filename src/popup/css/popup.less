@@ -1,25 +1,42 @@
-@import "../common/css/variables";
+@import "../../common/css/variables";
+@import "../../common/css/mixins";
+
+.include-custom-font( 'Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
+.include-custom-font( 'Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
+.include-custom-font( 'Open Sans', 'open-sans-v10-latin_cyrillic-regular', 400, normal);
+.include-custom-font( 'Open Sans Italic', 'open-sans-v10-latin_cyrillic-italic', 400, italic);
+.include-custom-font( 'Open Sans Semibold', 'open-sans-v10-latin_cyrillic-600', 600, normal);
+.include-custom-font( 'Open Sans Semibold Italic', 'open-sans-v10-latin_cyrillic-600italic', 600, italic);
+.include-custom-font( 'Open Sans Bold', 'open-sans-v10-latin_cyrillic-700', 700, normal);
+.include-custom-font( 'Open Sans Bold Italic', 'open-sans-v10-latin_cyrillic-700italic', 700, italic);
+.include-custom-font( 'Open Sans Extrabold', 'open-sans-v10-latin_cyrillic-800', 800, normal);
+.include-custom-font( 'Open Sans Extrabold Italic', 'open-sans-v10-latin_cyrillic-800italic', 800, italic);
 
 body {
     margin: 0;
 }
 
 .adblock-recovery-popup {
-    width: 330px;
-    padding: 20px;
+    width: 270px;
+    padding: 10px 20px;
     background: #fff;
+    font: 14px/1.625 "Open Sans",Arial,sans-serif;
 
-    .adblock-recovery-popup__options {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        vertical-align: middle;
-        margin: 0 10px;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        background: url('../common/img/settings.svg') no-repeat;
-        background-size: contain;
+    h1 {
+        margin: 10px 0;
+        font: 19px/1 "Open Sans",Arial,sans-serif;
+    }
+
+    h2 {
+        font: 14px/1.625 "Open Sans",Arial,sans-serif;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    p {
+        margin: 10px 0;
     }
 
     ul {
@@ -40,8 +57,7 @@ body {
                 height: 15px;
                 left: 0;
                 top: 0;
-                background: url('../common/img/ok.svg') no-repeat;
-                background-size: contain;
+                .bg('ok.svg');
             }
 
             .adblock-recovery-status-tooltip {
@@ -51,8 +67,7 @@ body {
                 height: 15px;
                 margin: 0 5px;
                 opacity: 0.8;
-                background: url('../common/img/tooltip.svg') no-repeat;
-                background-size: contain;
+                .bg('tooltip.svg');
 
                 .adblock-recovery-status-tooltip-text {
                     position: absolute;
@@ -81,11 +96,22 @@ body {
 
             &.status-icon-warning {
                 li:before {
-                    background: url('../common/img/not-ok.svg') no-repeat;
-                    background-size: contain;
+                    .bg('not-ok.svg');
                 }
             }
         }
+    }
+
+    .adblock-recovery-popup__options {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        vertical-align: middle;
+        margin: 0 10px;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        .bg('settings.svg');
     }
 
     .adblock-recovery-popup__details {

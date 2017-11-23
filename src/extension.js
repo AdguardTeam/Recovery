@@ -5,13 +5,15 @@ import Highlightlinks from './common/highlightlinks';
 import ChromeRuntime from './common/chrome.runtime';
 import Utils from './common/utils';
 import Logs from './common/logs';
+import Store from './options/js/store';
 
 const template = new Template();
 const view = new View(template);
 const logs = new Logs();
+const store = new Store();
 const utils = new Utils(logs);
 const highlightlinks = new Highlightlinks(utils, logs);
-const controller = new Controller(logs, view, highlightlinks);
+const controller = new Controller(logs, view, highlightlinks, store);
 
 new ChromeRuntime(controller);
 

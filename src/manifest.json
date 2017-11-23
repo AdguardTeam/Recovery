@@ -3,7 +3,7 @@
 
     "name": "Adblock Recovery",
     "description": "Adblock Recovery extension",
-    "version": "0.1.0",
+    "version": "0.2.0",
 
     "browser_action": {
         "default_icon": "options/img/favicon-64x64.png",

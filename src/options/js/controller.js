@@ -5,21 +5,17 @@ export default class Options {
 
         view.localization();
         view.updateOption(this.updateOption.bind(this));
-        store.getOptions(function(data){
-            view.setOptions(data);
+
+        store.getData().then(response => {
+            view.setOptions(response);
         });
     }
 
-    saveOptions() {
+    updateOption(id, value) {
         const view = this.view;
-        this.store.update(this.view.getOptions(), () => {
-            view.showSaveStatus();
-        });
-    }
 
-    updateOption(option, value) {
-        this.store.updateOption(option, value, () => {
-            console.log('upd');
+        this.store.updateData(id, value).then(() => {
+            view.showSaveStatus();
         });
     }
 }

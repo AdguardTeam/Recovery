@@ -1,6 +1,6 @@
 /* global ADBLOCKRECOVERYSTYLE*/
 
-import {$on,qsa,appendCSS} from './helpers';
+import {$on,qsa,appendCSS,qs} from './helpers';
 
 export default class Highlightlinks {
     constructor(utils, logs) {
@@ -23,6 +23,10 @@ export default class Highlightlinks {
 
         if (!this.linkElements.length) {
             return false;
+        }
+
+        if (!qs('#adblock-recovery-styles')) {
+            appendCSS(ADBLOCKRECOVERYSTYLE, null, 'adblock-recovery-styles');
         }
 
         this.linkElements.forEach((el) => this.addIconToLinkElement(el, handler));
@@ -58,8 +62,6 @@ export default class Highlightlinks {
         elementData.categories.forEach((lvl) => {
             adblockRecoveryIcon.classList.add('adblock-recovery-status-' + lvl);
         });
-
-        appendCSS(ADBLOCKRECOVERYSTYLE);
 
         el.parentNode.insertBefore(adblockRecovery, el.nextSibling);
         $on(adblockRecoveryIcon, 'click', this.stopPropagation);

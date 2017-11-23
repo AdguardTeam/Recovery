@@ -16,10 +16,13 @@ describe('#URL Tests', function() {
 
 describe('#Requirements Tests', function() {
     it('Check requirements with options', function() {
-        var options = {opt:{warningIconsNearLinks:true}};
+        var options = {
+            warningIconsNearLinks: {
+                show: false
+            }
+        };
         expect(window.controller.pageCheckRequirements(options)).to.equal(false);
     });
-
     it('Check requirements without options', function() {
         expect(window.controller.pageCheckRequirements({})).to.equal(false);
     });

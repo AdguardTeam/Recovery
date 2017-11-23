@@ -11,11 +11,11 @@ import lessAutoprefix from 'less-plugin-autoprefix';
 
 const paths = {
     scripts: {
-        entry: 'src/popup/popup.js',
+        entry: 'src/popup/js/popup.js',
         name: 'popup.js'
     },
     styles: {
-        entry: 'src/popup/popup.less'
+        entry: 'src/popup/css/popup.less'
     },
     html: {
         entry: 'src/popup/popup.html'

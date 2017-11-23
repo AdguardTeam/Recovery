@@ -1,26 +1,26 @@
 import _ from 'lodash';
-import {gm} from './gm-api';
-import {defaultOptions} from '../options/js/options';
+// import {commonOptions} from '../options/js/options';
 import Urls from '../data/urls.json';
 
 export default class Controller {
-    constructor(logs, view, highlightlinks) {
+    constructor(logs, view, highlightlinks, store) {
+        this.store = store;
         this.view = view;
         this.highlightlinks = highlightlinks;
         this.logs = logs;
-        this.options = this.getOptions() || defaultOptions;
         this.observer = null;
 
+        store.getData().then(response => {
+            this.init(response);
+        });
+
         this.check = this.checkLink.bind(this);
-
-        this.init();
-
-        this.mutationObserver();
     }
 
-    init() {
-        if (this.pageCheckRequirements(this.options)) {
+    init(options) {
+        if (this.pageCheckRequirements(options)) {
             this.highlightlinks.show(this.check);
+            this.mutationObserver();
         }
     }
 
@@ -35,11 +35,15 @@ export default class Controller {
             return false;
         }
 
-        return opt.urls.some((url) => {
-            if (url.show && document.location.host.indexOf(url.host) === 0) {
+        if (!opt.warningIconsNearLinks.show) {
+            return false;
+        }
+
+        for (let url in opt) {
+            if (opt[url].show && document.location.host.indexOf(opt[url].host) === 0) {
                 return true;
             }
-        });
+        }
     }
 
     /**
@@ -58,7 +62,7 @@ export default class Controller {
         try {
             _this.observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList') {
+                    if (mutation.type === 'childList' && mutation.addedNodes[0]) {
                         throttleRebuild(_this, mutation.target.classList, mutation.addedNodes[0]);
                     }
                 });
@@ -74,14 +78,14 @@ export default class Controller {
     }
 
     /**
-     * Function for highlighting links when changing the DOM. Lodash Throttle with 500 ms for better performance
+     * Function for highlighting links when changing the DOM
      *
      * @param  {Object} elClasses   list of element classes
      * @param  {Object} nodes       changeable DOM node
      */
     rebuild(_this, elClasses, nodes) {
-        if (nodes && nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adblock-recovery') && !elClasses.contains('adblock-recovery-status')) {
-            _this.init();
+        if (nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adblock-recovery') && !elClasses.contains('adblock-recovery-status')) {
+            _this.highlightlinks.show(_this.check);
         }
     }
 
@@ -92,9 +96,5 @@ export default class Controller {
      */
     checkLink(url) {
         return Urls.data.find((link) => url.indexOf(link.domain) >= 0);
-    }
-
-    getOptions() {
-        return gm.get('adblock-recovery-store', defaultOptions);
     }
 }

@@ -1,6 +1,6 @@
 const languages = {
     en: require('../_locales/en.json'),
-    ru: require('../_locales/ru.json')
+    // ru: require('../_locales/ru.json')
 };
 
 let currentLocale, locale;

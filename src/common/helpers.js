@@ -36,13 +36,18 @@ export function $delegate(target, selector, type, handler, capture) {
 
 export const escapeForHTML = s => s.replace(/[&<]/g, c => c === '&' ? '&amp;' : '&lt;');
 
-export function appendCSS(styles, el) {
+export function appendCSS(styles, el, id) {
     if (!el) {
         el = document.head || document.getElementsByTagName('head')[0];
     }
 
     const style = document.createElement('style');
     style.type = 'text/css';
+
+    if (id) {
+        style.id = id;
+    }
+
     if (style.styleSheet) {
         style.styleSheet.cssText = styles;
     } else {

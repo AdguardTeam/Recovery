@@ -1,13 +1,21 @@
 import {qs, qsa, $delegate} from '../../common/helpers';
 import {i18n} from '../../common/localization';
-import {defaultOptions} from './options';
+import {commonOptions, urlsOptions} from './options';
 
 export default class View {
     constructor() {
         this.options = {};
 
-        for (let option in defaultOptions) {
-            this.options[option] = qs('#' + option);
+        for (let option in commonOptions) {
+            if (commonOptions.hasOwnProperty(option)) {
+                this.options[option] = qs('#' + option);
+            }
+        }
+
+        for (let option in urlsOptions) {
+            if (urlsOptions.hasOwnProperty(option)) {
+                this.options[option] = qs('#' + option);
+            }
         }
 
         this.optionsBlock = qs('.options');
@@ -30,10 +38,7 @@ export default class View {
     }
 
     showSaveStatus() {
-        this.statusText.classList.add('active');
-        setTimeout(() => {
-            this.statusText.classList.remove('active');
-        }, 750);
+
     }
 
     setOptions(data) {
@@ -42,14 +47,21 @@ export default class View {
         }
 
         for (let option in this.options) {
-            this.options[option].querySelector('input').checked = data[option];
+            if (this.options.hasOwnProperty(option)) {
+                let input = this.options[option] && this.options[option].querySelector('input');
+                if (input) {
+                    input.checked = data[option].show;
+                }
+            }
         }
     }
 
     getOptions() {
         let data = {};
         for (let option in this.options) {
-            data[option] = this.options[option].checked;
+            if (this.options.hasOwnProperty(option)) {
+                data[option].show = this.options[option].checked;
+            }
         }
         return data;
     }

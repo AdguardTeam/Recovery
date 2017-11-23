@@ -1,5 +1,5 @@
 /* global ADBLOCKRECOVERYSTYLE */
-import {$on, $delegate, qsa} from './helpers';
+import {$on, $delegate, qsa, qs} from './helpers';
 import Urls from '../data/urls.json';
 import logs from './logs';
 
@@ -18,22 +18,24 @@ export default class View {
     }
 
     /**
-     * opening popup with information about the link. `z-index:0` style is necessary for the icons to be always under the popup
+     * opening popup with information about the link
      *
      * @param {Object} target   current link element
      */
     showLinkStatus(target) {
         const _this = this;
         target.classList.add('adblock-recovery-status-show');
-        qsa('.adblock-recovery').forEach((el) => el.style = 'z-index:0!important;');
-        target.parentNode.style = '';
+
+        let rect = this.getOffsetRect(target);
 
         const iframe = document.createElement('iframe');
         iframe.setAttribute('class', 'adblock-recovery-status-iframe');
         iframe.setAttribute('frameBorder', 0);
-        iframe.setAttribute('width', 400);
+        iframe.setAttribute('width', 350);
         iframe.setAttribute('height', 300);
         iframe.setAttribute('allowTransparency', 'true');
+
+        this.moveElementTo(iframe, rect.left, rect.top);
 
         let iframeAlreadyLoaded = false;
 
@@ -54,7 +56,7 @@ export default class View {
             }, true);
         };
 
-        target.appendChild(iframe);
+        document.body.appendChild(iframe);
     }
 
     /**
@@ -78,23 +80,58 @@ export default class View {
             $delegate(doc, '.adblock-recovery-status-close', 'click', () => {
                 _this.closeLinksStatus();
             }, true);
-
-            $delegate(doc, '.adblock-recovery-status-settings', 'click', () => {
-                return;
-            }, true);
         } catch (ex) {
             logs.error(ex);
         }
     }
 
     /**
-     * closing popup with information about the link and resetting inline `z-index:0` style
+     * closing popup with information about the link
      */
     closeLinksStatus() {
-        qsa('.adblock-recovery').forEach((el) => el.style = '');
+        let frame = qs('.adblock-recovery-status-iframe');
+        if (frame) {
+            frame.remove();
+            frame = null;
+        }
         qsa('.adblock-recovery-status-show').forEach((e) => {
             e.classList.remove('adblock-recovery-status-show');
-            e.innerHTML = '';
         });
     }
+
+    getOffsetRect(elem) {
+        const box = elem.getBoundingClientRect();
+
+        const body = document.body;
+        const docElem = document.documentElement;
+
+        const scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+        const scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+
+        const clientTop = docElem.clientTop || body.clientTop || 0;
+        const clientLeft = docElem.clientLeft || body.clientLeft || 0;
+
+        let top = box.top + scrollTop - clientTop;
+        let left = box.left + scrollLeft - clientLeft;
+
+        return {
+            top: Math.round(top),
+            left: Math.round(left)
+        };
+    }
+
+    /**
+     * Set transition css property for drag
+     * translate3d is for better rendering performance
+     * see: https://www.html5rocks.com/en/tutorials/speed/layers/
+     */
+    moveElementTo(el, x, y) {
+        let transform = 'translate3d(' + x + 'px,' + y + 'px, 0px)';
+        el.style.webkitTransform = transform;
+        el.style.mozTransform = transform;
+        el.style.msTransform = transform;
+        el.style.oTransform = transform;
+        el.style.transform = transform;
+    }
+
 }
