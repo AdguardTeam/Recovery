@@ -23,6 +23,10 @@ const paths = {
         entry: 'src/common/css/style.less',
         src: 'src/common/css/**/*.less'
     },
+    background: {
+        entry: 'src/background.js',
+        name: 'background.js'
+    },
     dest: 'dist/',
     manifest: 'src/manifest.json'
 };
@@ -32,13 +36,27 @@ const clean = () => del(['./dist/style.**']);
 const scripts = () => {
     return browserify().transform(babelify, {
             presets: ['stage-0', 'es2015'],
-            plugins: ['transform-runtime', 'transform-decorators-legacy']
+            plugins: ['transform-runtime']
         })
         .require(paths.scripts.entry, {
             entry: true
         })
         .bundle()
         .pipe(source(paths.scripts.name))
+        .pipe(buffer())
+        .pipe(gulp.dest(paths.dest));
+};
+
+const background = () => {
+    return browserify().transform(babelify, {
+            presets: ['stage-0', 'es2015'],
+            plugins: ['transform-runtime']
+        })
+        .require(paths.background.entry, {
+            entry: true
+        })
+        .bundle()
+        .pipe(source(paths.background.name))
         .pipe(buffer())
         .pipe(gulp.dest(paths.dest));
 };
@@ -77,4 +95,4 @@ const manifest = () => {
         .pipe(gulp.dest(paths.dest));
 };
 
-export default gulp.series(manifest, scripts, styles, cssToJs, userscriptConcat, clean);
+export default gulp.series(manifest, background, scripts, styles, cssToJs, userscriptConcat, clean);

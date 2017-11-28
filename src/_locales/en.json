@@ -41,8 +41,8 @@
     "open_details": {
         "message": "Open details"
     },
-    "view_details": {
-        "message": "View details"
+    "do_not_agree": {
+        "message": "Do not agree?"
     },
     "no_data": {
         "message": "No known threats"

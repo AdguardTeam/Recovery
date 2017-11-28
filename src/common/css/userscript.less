@@ -67,7 +67,7 @@
     border: 1px solid #ccc;
     box-shadow: rgba(0, 0, 0, 0.3) -1px 2px 4px;
     border-radius: 4px;
-    padding: 10px 20px;
+    padding: 15px;
     top: 0;
     left: 10px;
     cursor: default;
@@ -75,7 +75,7 @@
 
     .adguard-status-recovery {
         font-weight: 900;
-        margin: 20px 0;
+        margin: 10px 0;
         font-size: 12pt;
 
         .adblock-recovery-status-settings {
@@ -94,7 +94,7 @@
 
     .status {
         font-size: 20px;
-        margin: 20px 0;
+        margin: 10px 0 20px 0;
         color: @green;
         font-weight: 900;
 
@@ -115,6 +115,7 @@
         margin: 10px 0;
         word-break: break-word;
         white-space: normal;
+        line-height: 20px;
     }
 
     i {
@@ -131,15 +132,11 @@
         left: -5px;
         width: 10px;
         height: 10px;
-        margin-top: -5px;
+        margin-top: -6px;
         content: ' ';
         transform: rotate(45deg);
         background: rgb(255, 255, 255);
-    }
-
-    &:after {
-        z-index: 100;
-        box-shadow: rgba(0, 0, 0, 0.3) -1px 2px 4px;
+        box-shadow: rgba(0,0,0,.3) -3px 3px 7px -2px;
     }
 
     p {
@@ -150,9 +147,10 @@
     ul {
         list-style: none;
         padding: 0;
+        margin: 0;
         li {
             position: relative;
-            padding: 0 0 0 30px;
+            padding: 0 0 0 25px;
             margin: 10px 0;
         }
 
@@ -164,16 +162,25 @@
                 height: 15px;
                 left: 0;
                 top: 0;
+                bottom: 0;
+                margin: auto;
                 background: url('../img/ok.svg') no-repeat;
                 background-size: contain;
+            }
+
+            .adblock-recovery-threat-name {
+                font-weight: 200;
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 18px;
             }
 
             .adblock-recovery-status-tooltip {
                 display: inline-block;
                 vertical-align: middle;
-                width: 15px;
-                height: 15px;
-                margin: 0 5px;
+                width: 18px;
+                height: 18px;
+                margin: 0 0 0 10px;
                 opacity: .8;
                 background: url('../img/tooltip.svg') no-repeat;
                 background-size: contain;
@@ -218,17 +225,17 @@
         border: none;
         background: none;
         font-size: 24px;
-        line-height: 24px;
+        line-height: 12px;
         cursor: pointer;
-        padding: 0;
+        padding: 5px;
         margin: 0;
     }
 
-    .status-icon-readmod {
+    .adblock-recovery-do-not-agree {
         background: @green;
         border: none;
         padding: 10px 15px;
-        margin: 0;
+        margin: 10px 0 0 0;
         outline: none;
         color: #fff;
         cursor: pointer;

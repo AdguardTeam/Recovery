@@ -42,11 +42,15 @@ body {
     ul {
         list-style: none;
         padding: 0;
+        margin: 0;
 
         li {
             position: relative;
-            padding: 0 0 0 30px;
-            margin: 10px 0;
+            padding: 0 0 0 25px;
+
+            p {
+                margin: 5px 0;
+            }
         }
 
         &.adblock-recovery-popup__status-icon {
@@ -57,7 +61,14 @@ body {
                 height: 15px;
                 left: 0;
                 top: 0;
+                bottom: 0;
+                margin: auto;
                 .bg('ok.svg');
+            }
+
+            .adblock-recovery-status-name {
+                display: inline-block;
+                vertical-align: middle;
             }
 
             .adblock-recovery-status-tooltip {
@@ -65,7 +76,7 @@ body {
                 vertical-align: middle;
                 width: 15px;
                 height: 15px;
-                margin: 0 5px;
+                margin: 0 0 0 10px;
                 opacity: 0.8;
                 .bg('tooltip.svg');
 
@@ -118,7 +129,7 @@ body {
         background: @green;
         border: none;
         padding: 10px 15px;
-        margin: 0;
+        margin: 20px 0 0 0;
         outline: none;
         color: #fff;
         cursor: pointer;

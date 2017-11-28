@@ -43,7 +43,7 @@ export default class Highlightlinks {
             return false;
         }
 
-        let elementData = handler(el.hostname);
+        let elementData = handler(el.hostname) || this.findAlternativeLink(el, handler);
 
         if (!elementData) {
             return false;
@@ -57,6 +57,7 @@ export default class Highlightlinks {
         adblockRecovery = document.createElement('div');
         adblockRecovery.className = 'adblock-recovery';
         adblockRecovery.setAttribute('data-href', el.hostname);
+        adblockRecovery.setAttribute('data-href-alt', elementData.domain);
         adblockRecovery.appendChild(adblockRecoveryIcon);
 
         elementData.categories.forEach((lvl) => {
@@ -108,6 +109,30 @@ export default class Highlightlinks {
                 return false;
             default:
                 return true;
+        }
+    }
+
+    /**
+     * Finding threated links in short urls like `t.co`
+     *
+     * @param  {Object} element   current element
+     * @param  {Function} handler   function which is checking the link for compliance with settings Adblock Recovery
+     */
+    findAlternativeLink(element, handler) {
+        const altUrls = [];
+
+        altUrls.push(element.getAttribute('data-expanded-url')); // twitter
+        altUrls.push(element.getAttribute('title')); // others
+
+        for (let url of altUrls) {
+            if (url) {
+                url = decodeURIComponent(url);
+
+                url = this.utils.validateUrlString(url) && handler(url);
+                if (url) {
+                    return url;
+                }
+            }
         }
     }
 

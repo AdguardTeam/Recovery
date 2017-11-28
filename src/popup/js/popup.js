@@ -1,6 +1,6 @@
 /* global chrome */
 
-import {qs, qsa} from '../../common/helpers';
+import {qs,qsa} from '../../common/helpers';
 import categories from '../../data/categories.json';
 import {categoriesID} from '../../data/categories';
 import {i18n} from '../../common/localization';
@@ -16,10 +16,7 @@ const popup = qs('.adblock-recovery-popup');
  * Getting website url and antiadblock techniques from userscript
  */
 const getSiteData = () => {
-    chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, function(tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {getData: true}, function(response) {
             const lastError = chrome.runtime.lastError;
 
@@ -74,12 +71,12 @@ const appendData = (website) => {
     let threats = text.threats.reduce((text, threat) => {
         return text +
             '<li><p>' +
-                i18n(threat.name) +
-                '<span class="adblock-recovery-status-tooltip">' +
-                '<span class="adblock-recovery-status-tooltip-text">' +
-                i18n(threat.description) +
-                '</span>' +
-                '</span>' +
+            '<span class="adblock-recovery-status-name">' + i18n(threat.name) + '</span>' +
+            '<span class="adblock-recovery-status-tooltip">' +
+            '<span class="adblock-recovery-status-tooltip-text">' +
+            i18n(threat.description) +
+            '</span>' +
+            '</span>' +
             '</p></li>';
     }, '');
 
@@ -94,16 +91,16 @@ const noData = (url) => {
     }
 };
 
-optionsBtn.addEventListener('click', function() {
-    if (chrome.runtime.openOptionsPage) {
-        // Chrome 42+ method to open options pages
-        chrome.runtime.openOptionsPage();
-    } else {
-        window.open(chrome.runtime.getURL('options.html'));
-    }
-});
+window.addEventListener('DOMContentLoaded', function() {
+    optionsBtn.addEventListener('click', function() {
+        if (chrome.runtime.openOptionsPage) {
+            // Chrome 42+ method to open options pages
+            chrome.runtime.openOptionsPage();
+        } else {
+            window.open(chrome.runtime.getURL('options.html'));
+        }
+    });
 
-window.addEventListener('load', function() {
     getSiteData();
     localization();
 });

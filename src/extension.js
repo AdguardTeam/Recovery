@@ -15,6 +15,6 @@ const utils = new Utils(logs);
 const highlightlinks = new Highlightlinks(utils, logs);
 const controller = new Controller(logs, view, highlightlinks, store);
 
-new ChromeRuntime(controller);
+new ChromeRuntime(controller, utils);
 
 window.controller = controller;

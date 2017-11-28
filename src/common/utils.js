@@ -1,4 +1,4 @@
-import {qsa} from './helpers';
+import {qsa, qs} from './helpers';
 import {settings} from './settings';
 
 export default class Utils {
@@ -51,7 +51,7 @@ export default class Utils {
      * url string is not empty validation
      */
     validateUrlString(url) {
-        return !!url && url.length > 4;
+        return !!url && url.length > 3;
     }
 
     /**
@@ -78,10 +78,10 @@ export default class Utils {
     }
 
     /**
-     * link is not image validation
+     *checking that link does not have images
      */
     validateLinkIsNotTagImage(el) {
-        return !(el.childElementCount === 1 && el.innerHTML.indexOf('img') > -1);
+        return !qs('img', el);
     }
 
     /**

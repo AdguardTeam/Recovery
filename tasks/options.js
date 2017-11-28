@@ -41,7 +41,7 @@ const paths = {
 function scripts() {
     return browserify().transform(babelify, {
             presets: ['stage-0', 'es2015'],
-            plugins: ['transform-runtime', 'transform-decorators-legacy']
+            plugins: ['transform-runtime']
         })
         .require(paths.scripts.entry, {
             entry: true
@@ -55,7 +55,7 @@ function scripts() {
 function minifyScripts() {
     return browserify().transform(babelify, {
             presets: ['stage-0', 'es2015'],
-            plugins: ['transform-runtime', 'transform-decorators-legacy']
+            plugins: ['transform-runtime']
         })
         .require(paths.scripts.entry, {
             entry: true

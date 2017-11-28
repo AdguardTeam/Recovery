@@ -46,7 +46,7 @@ export default class View {
             }
             iframeAlreadyLoaded = true;
             let status = Urls.data.find((link) => {
-                return target.parentNode.getAttribute('data-href').indexOf(link.domain) >= 0;
+                return target.parentNode.getAttribute('data-href').indexOf(link.domain) >= 0 || target.parentNode.getAttribute('data-href-alt').indexOf(link.domain) >= 0;
             });
             const content = _this.template.linkStatus(status);
             _this.appendContentToIframe(iframe, content);

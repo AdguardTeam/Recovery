@@ -3,23 +3,27 @@
 
     "name": "Adblock Recovery",
     "description": "Adblock Recovery extension",
-    "version": "0.2.0",
+    "version": "0.3.0",
 
     "browser_action": {
-        "default_icon": "options/img/favicon-64x64.png",
+        "default_icon": "options/img/logo.png",
         "default_popup": "popup/popup.html",
         "default_title": "Adblock Recovery"
     },
     "icons": {
-        "16": "options/img/favicon-16x16.png",
-        "48": "options/img/favicon-48x48.png",
-        "128": "options/img/favicon-128x128.png"
+        "16": "options/img/logo.png",
+        "48": "options/img/logo.png",
+        "128": "options/img/logo.png"
     },
     "content_scripts": [{
         "all_frames": true,
         "matches": ["http://*/*", "https://*/*"],
         "js": ["userscript.js"]
     }],
+    "background": {
+        "persistent": false,
+        "scripts": ["background.js"]
+    },
     "minimum_chrome_version": "26",
     "options_page": "options/index.html",
     "permissions": [
@@ -27,8 +31,6 @@
         "tabs",
         "http://*/*",
         "https://*/*",
-        "webRequest",
-        "webRequestBlocking",
         "webNavigation",
         "unlimitedStorage",
         "privacy",
