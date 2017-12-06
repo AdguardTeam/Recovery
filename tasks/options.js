@@ -8,37 +8,30 @@ import lessAutoprefix from 'less-plugin-autoprefix';
 import uglify from 'gulp-uglify';
 
 const paths = {
-    src: 'src/options/**/*.{jpg,png,svg,json,html,js,less}',
     scripts: {
         entry: 'src/options/js/main.js',
         src: 'src/options/js/**/*.js',
-        dest: 'dist/options/',
         name: 'options.js'
     },
     styles: {
-        entry: 'src/options/css/main.less',
-        src: 'src/options/css/**/*.less',
-        dest: 'dist/options/'
-    },
-    pages: {
-        src: './src/options/pages/**/*.html',
-        dest: './dist/options/pages/'
-    },
-    images: {
-        src: './src/options/img/**/*.{png,jpg,svg}',
-        dest: './dist/options/img/'
-    },
-    fonts: {
-        src: './src/options/fonts/**/*',
-        dest: './dist/options/fonts/'
+        entry: 'src/options/css/options.less',
+        src: 'src/options/css/**/*.less'
     },
     index: {
-        src: './src/options/index.html',
-        dest: './dist/options/'
-    }
+        src: './src/options/options.html'
+    },
+    images: {
+        src: './src/common/img/**/*.{png,jpg,svg}',
+        dest: './dist/common/img/'
+    },
+    fonts: {
+        src: './src/common/fonts/**/*.ttf',
+        dest: './dist/common/fonts/'
+    },
+    dest: 'dist/'
 };
 
-function scripts() {
+const scripts = () => {
     return browserify().transform(babelify, {
             presets: ['stage-0', 'es2015'],
             plugins: ['transform-runtime']
@@ -49,25 +42,10 @@ function scripts() {
         .bundle()
         .pipe(source(paths.scripts.name))
         .pipe(buffer())
-        .pipe(gulp.dest(paths.scripts.dest));
-}
+        .pipe(gulp.dest(paths.dest));
+};
 
-function minifyScripts() {
-    return browserify().transform(babelify, {
-            presets: ['stage-0', 'es2015'],
-            plugins: ['transform-runtime']
-        })
-        .require(paths.scripts.entry, {
-            entry: true
-        })
-        .bundle()
-        .pipe(source(paths.scripts.name))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(gulp.dest(paths.scripts.dest));
-}
-
-function styles() {
+const styles = () => {
     const autoprefix = new lessAutoprefix({
         browsers: ['last 3 versions', '>1%', 'Firefox ESR', 'Opera 12.1']
     });
@@ -76,35 +54,33 @@ function styles() {
         .pipe(less({
             plugins: [autoprefix]
         }))
-        .pipe(gulp.dest(paths.styles.dest));
-}
+        .pipe(gulp.dest(paths.dest));
+};
 
-function pages() {
-    return gulp.src(paths.pages.src)
-        .pipe(gulp.dest(paths.pages.dest));
-}
-
-function images() {
+const images = () => {
     return gulp.src(paths.images.src)
         .pipe(gulp.dest(paths.images.dest));
-}
+};
 
-function fonts() {
+const fonts = () => {
     return gulp.src(paths.fonts.src)
         .pipe(gulp.dest(paths.fonts.dest));
-}
+};
 
-function index() {
+const index = () => {
     return gulp.src(paths.index.src)
-        .pipe(gulp.dest(paths.index.dest));
-}
+        .pipe(gulp.dest(paths.dest));
+};
 
-let build;
+const uglifyJS = (done) => {
+    if (process.env.NODE_ENV !== 'prod') {
+        done();
+        return false;
+    }
 
-if (process.env.NODE_ENV === 'production') {
-    build = gulp.series(minifyScripts, styles, pages, images, fonts, index);
-} else {
-    build = gulp.series(scripts, styles, pages, images, fonts, index);
-}
+    return gulp.src(paths.dest + paths.scripts.name)
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dest));
+};
 
-export default build;
+export default gulp.series(scripts, styles, images, fonts, index, uglifyJS);

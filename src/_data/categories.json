@@ -1,0 +1,25 @@
+{
+    "1": {
+        "name": "adblock_wall",
+        "description": "adblock_wall_description",
+        "warning": true
+    },
+    "2": {
+        "name": "paywall",
+        "description": "paywall_description",
+        "warning": true
+    },
+    "3": {
+        "name": "ad_reinjection",
+        "description": "ad_reinjection_description",
+        "warning": true
+    },
+    "4": {
+        "name": "adblock_warning",
+        "description": "adblock_warning_description"
+    },
+    "5": {
+        "name": "disable_ads",
+        "description": "disable_ads_description"
+    }
+}

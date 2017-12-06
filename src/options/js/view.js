@@ -1,6 +1,6 @@
-import {qs, qsa, $delegate} from '../../common/helpers';
-import {i18n} from '../../common/localization';
-import {commonOptions, urlsOptions} from './options';
+import {qs, qsa, $delegate} from '../../common/js/helpers';
+import {i18n} from '../../common/js/localization';
+import {commonOptions, urlsOptions} from '../../common/js/options';
 
 export default class View {
     constructor() {

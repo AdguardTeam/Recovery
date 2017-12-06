@@ -6,7 +6,7 @@ Adblock-Recovery extension
 
 For build extension:
 
-    $ npm run build
+    $ npm start
 
 Download localization files (requires download file settings `oneskyapp.json`):
 

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import del from 'del';
 import gulp from 'gulp';
 import browserify from 'browserify';
@@ -11,24 +12,25 @@ import inlineAssets from 'gulp-inline-assets';
 import cleanCSS from 'gulp-clean-css';
 import gulpCss2js from 'gulp-css2js';
 import concat from 'gulp-concat';
+import uglify from 'gulp-uglify';
+const file = require('gulp-file');
 
 const paths = {
-    src: 'src/common/**/*.{jpg,png,svg,json,html,js,less}',
     scripts: {
-        entry: 'src/extension.js',
-        src: 'src/common/js/**/*.js',
+        entry: 'src/userscript/userscript.js',
+        src: 'src/userscript/js/**/*.js',
         name: 'userscript.js'
     },
     styles: {
-        entry: 'src/common/css/style.less',
-        src: 'src/common/css/**/*.less'
+        entry: 'src/userscript/css/style.less',
+        src: 'src/userscript/css/**/*.less'
     },
     background: {
         entry: 'src/background.js',
         name: 'background.js'
     },
-    dest: 'dist/',
-    manifest: 'src/manifest.json'
+    manifest: 'src/manifest.json',
+    dest: 'dist/'
 };
 
 const clean = () => del(['./dist/style.**']);
@@ -61,7 +63,7 @@ const background = () => {
         .pipe(gulp.dest(paths.dest));
 };
 
-function styles() {
+const styles = () => {
     const autoprefix = new lessAutoprefix({
         browsers: ['last 3 versions', '>1%', 'Firefox ESR', 'Opera 12.1']
     });
@@ -73,26 +75,44 @@ function styles() {
         .pipe(inlineAssets())
         .pipe(cleanCSS())
         .pipe(gulp.dest(paths.dest));
-}
+};
 
-function cssToJs() {
+const cssToJs = () => {
     return gulp.src('./dist/style.css')
         .pipe(gulpCss2js({
             prefix: 'var ADBLOCKRECOVERYSTYLE = "',
             suffix: '";\n'
         }))
         .pipe(gulp.dest('./dist/'));
-}
+};
 
-function userscriptConcat() {
+const userscriptConcat = () => {
     return gulp.src(['./dist/style.js', './dist/userscript.js'])
       .pipe(concat(paths.scripts.name))
       .pipe(gulp.dest('./dist/'));
-}
+};
 
 const manifest = () => {
-    return gulp.src(paths.manifest)
+    const packageFile = JSON.parse(fs.readFileSync('package.json'));
+    const manifest = JSON.parse(fs.readFileSync(paths.manifest));
+
+    manifest.version = packageFile.version;
+    manifest.description = packageFile.description;
+
+    return gulp.src(paths.dest)
+        .pipe(file('manifest.json', JSON.stringify(manifest)))
         .pipe(gulp.dest(paths.dest));
 };
 
-export default gulp.series(manifest, background, scripts, styles, cssToJs, userscriptConcat, clean);
+const uglifyJS = (done) => {
+    if (process.env.NODE_ENV !== 'prod') {
+        done();
+        return false;
+    }
+
+    return gulp.src([paths.dest + paths.scripts.name, paths.dest + paths.background.name])
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dest));
+};
+
+export default gulp.series(manifest, background, scripts, styles, cssToJs, userscriptConcat, uglifyJS, clean);

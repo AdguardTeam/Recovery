@@ -8,10 +8,11 @@ import inlineImages from 'less-plugin-inline-urls';
 import inlineAssets from 'gulp-inline-assets';
 import cleanCSS from 'gulp-clean-css';
 import lessAutoprefix from 'less-plugin-autoprefix';
+import uglify from 'gulp-uglify';
 
 const paths = {
     scripts: {
-        entry: 'src/popup/js/popup.js',
+        entry: 'src/popup/popup.js',
         name: 'popup.js'
     },
     styles: {
@@ -20,7 +21,7 @@ const paths = {
     html: {
         entry: 'src/popup/popup.html'
     },
-    dest: 'dist/popup/'
+    dest: 'dist/'
 };
 
 const scripts = () => {
@@ -39,7 +40,7 @@ const scripts = () => {
 
 const styles = () => {
     const autoprefix = new lessAutoprefix({
-        browsers: ['last 3 versions', '>1%', 'Firefox ESR', 'Opera 12.1']
+        browsers: ['last 3 versions', '>1%', 'Firefox ESR']
     });
 
     return gulp.src(paths.styles.entry)
@@ -56,4 +57,15 @@ const html = () => {
         .pipe(gulp.dest(paths.dest));
 };
 
-export default gulp.series(scripts, styles, html);
+const uglifyJS = (done) => {
+    if (process.env.NODE_ENV !== 'prod') {
+        done();
+        return false;
+    }
+
+    return gulp.src(paths.dest + paths.scripts.name)
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dest));
+};
+
+export default gulp.series(scripts, styles, html, uglifyJS);

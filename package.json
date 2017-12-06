@@ -1,21 +1,19 @@
 {
   "name": "adblock-recovery",
-  "version": "0.3.0",
-  "description": "",
+  "version": "0.4.0",
+  "description": "Adblock Recovery extension",
   "main": "gulpfile.babel.js",
   "scripts": {
-    "start": "./node_modules/.bin/gulp options && ./node_modules/.bin/gulp extension && ./node_modules/.bin/gulp popup",
+    "start": "NODE_ENV=prod ./node_modules/.bin/gulp options && NODE_ENV=prod ./node_modules/.bin/gulp extension && NODE_ENV=prod ./node_modules/.bin/gulp popup",
     "dev": "./node_modules/.bin/gulp options && ./node_modules/.bin/gulp extension && ./node_modules/.bin/gulp popup && ./node_modules/.bin/gulp watch",
     "watch": "./node_modules/.bin/gulp watch",
-    "build": "NODE_ENV=production ./node_modules/.bin/gulp options && ./node_modules/.bin/gulp extension && ./node_modules/.bin/gulp popup",
     "test": "mocha-phantomjs test/test.html",
     "ghtest": "./node_modules/.bin/gulp tests-gh-pages",
     "locales": "./node_modules/.bin/gulp download-localizations",
     "upload": "./node_modules/.bin/gulp upload-localization"
   },
-  "author": "",
+  "author": "VashBan",
   "devDependencies": {
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
@@ -30,6 +28,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-css2js": "^1.0.2",
     "gulp-download-stream": "0.0.13",
+    "gulp-file": "^0.3.0",
     "gulp-hash-creator": "^0.2.0",
     "gulp-inline-assets": "^0.1.1",
     "gulp-less": "^3.3.2",
@@ -44,7 +43,6 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
-    "lodash-decorators": "^4.3.5"
+    "lodash": "^4.17.4"
   }
 }

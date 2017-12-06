@@ -1,0 +1,238 @@
+.include-custom-font('Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
+.include-custom-font('Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
+.include-custom-font('Open Sans', 'open-sans-v10-latin_cyrillic-regular', 400, normal);
+.include-custom-font('Open Sans Italic', 'open-sans-v10-latin_cyrillic-italic', 400, italic);
+.include-custom-font('Open Sans Semibold', 'open-sans-v10-latin_cyrillic-600', 600, normal);
+.include-custom-font('Open Sans Semibold Italic', 'open-sans-v10-latin_cyrillic-600italic', 600, italic);
+.include-custom-font('Open Sans Bold', 'open-sans-v10-latin_cyrillic-700', 700, normal);
+.include-custom-font('Open Sans Bold Italic', 'open-sans-v10-latin_cyrillic-700italic', 700, italic);
+.include-custom-font('Open Sans Extrabold', 'open-sans-v10-latin_cyrillic-800', 800, normal);
+.include-custom-font('Open Sans Extrabold Italic', 'open-sans-v10-latin_cyrillic-800italic', 800, italic);
+
+.adblock-recovery {
+    all: initial;
+    position: relative!important;
+    display: inline-block!important;
+    margin: 0 0 0 5px!important;
+    vertical-align: middle!important;
+
+    .adblock-recovery-status {
+        all: initial;
+        display: block!important;
+        width: 15px!important;
+        height: 17px!important;
+        vertical-align: middle!important;
+        cursor: pointer!important;
+        .bg('logo.svg');
+        opacity: .5!important;
+
+        &.adblock-recovery-status-1,
+        &.adblock-recovery-status-2,
+        &.adblock-recovery-status-4 {
+            .bg('logo-not-ok.svg');
+        }
+
+        &:hover, &.adblock-recovery-status-show {
+            opacity: 1!important;
+        }
+    }
+}
+
+.adblock-recovery-status-iframe {
+    position: absolute!important;
+    top: 0!important;
+    left: 0!important;
+    z-index: 9999999!important;
+    margin: -13px 0 0 15px!important;
+}
+
+.adblock-recovery-status-body {
+    margin: 0;
+    font: 14px/1.625 "Open Sans",Arial,sans-serif;
+    line-height: 16px;
+
+    ::selection {
+        background: transparent;
+    }
+}
+
+.adblock-recovery-status-content {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.3) -1px 2px 4px;
+    border-radius: 4px;
+    padding: 15px;
+    top: 0;
+    left: 10px;
+    cursor: default;
+    font-size: 18px;
+    transform: translate3d(0,0,0);
+
+    .adguard-status-recovery {
+        font-weight: 900;
+        margin: 10px 0;
+        font-size: 12pt;
+
+        .adblock-recovery-status-settings {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            vertical-align: middle;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            .bg('settings.svg');
+        }
+    }
+
+    .status {
+        font-size: 20px;
+        margin: 10px 0 20px 0;
+        color: @green;
+        font-weight: 900;
+
+        &.status-warning {
+            color: @red;
+        }
+    }
+
+    p,i {
+        font: 14px/1.625 "Open Sans",Arial,sans-serif;
+        line-height: 16px;
+        color: #333;
+    }
+
+    p {
+        display: block;
+        padding: 0;
+        margin: 10px 0;
+        word-break: break-word;
+        white-space: normal;
+        line-height: 20px;
+    }
+
+    i {
+        padding: 0;
+        margin: 0;
+        font-style: italic;
+    }
+
+    &:before,
+    &:after {
+        position: absolute;
+        z-index: 101;
+        top: 20px;
+        left: -5px;
+        width: 10px;
+        height: 10px;
+        margin-top: -6px;
+        content: ' ';
+        transform: rotate(45deg);
+        background: rgb(255, 255, 255);
+        box-shadow: rgba(0,0,0,.3) -3px 3px 7px -2px;
+    }
+
+    p {
+        width: 100%;
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+            position: relative;
+            padding: 0 0 0 25px;
+            margin: 10px 0;
+        }
+
+        &.status-icon {
+            li:before {
+                position: absolute;
+                content: ' ';
+                width: 15px;
+                height: 15px;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                .bg('logo.svg');
+            }
+
+            .adblock-recovery-threat-name {
+                font-weight: 200;
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 18px;
+            }
+
+            .adblock-recovery-status-tooltip {
+                display: inline-block;
+                vertical-align: middle;
+                width: 18px;
+                height: 18px;
+                margin: 0 0 0 10px;
+                opacity: .8;
+                .bg('tooltip.svg');
+
+                .adblock-recovery-status-tooltip-text {
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    bottom: 0;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all .3s  ease-in-out;
+                    width: 150px;
+                    padding: 15px;
+                    background: #fff;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                }
+
+                &:hover {
+                    opacity: 1;
+
+                    .adblock-recovery-status-tooltip-text {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+            }
+
+            &.status-icon-warning {
+                li:before {
+                    .bg('logo-not-ok.svg');
+                }
+            }
+        }
+    }
+
+    .adblock-recovery-status-close {
+        float: right;
+        outline: none;
+        border: none;
+        background: none;
+        font-size: 24px;
+        line-height: 12px;
+        cursor: pointer;
+        padding: 5px;
+        margin: 0;
+    }
+
+    .adblock-recovery-do-not-agree {
+        background: @green;
+        border: none;
+        padding: 10px 15px;
+        margin: 10px 0 0 0;
+        outline: none;
+        color: #fff;
+        cursor: pointer;
+        &:hover {
+            opacity: .9;
+        }
+    }
+}
