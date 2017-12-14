@@ -1,43 +1,3 @@
-.include-custom-font('Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
-.include-custom-font('Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
-.include-custom-font('Open Sans', 'open-sans-v10-latin_cyrillic-regular', 400, normal);
-.include-custom-font('Open Sans Italic', 'open-sans-v10-latin_cyrillic-italic', 400, italic);
-.include-custom-font('Open Sans Semibold', 'open-sans-v10-latin_cyrillic-600', 600, normal);
-.include-custom-font('Open Sans Semibold Italic', 'open-sans-v10-latin_cyrillic-600italic', 600, italic);
-.include-custom-font('Open Sans Bold', 'open-sans-v10-latin_cyrillic-700', 700, normal);
-.include-custom-font('Open Sans Bold Italic', 'open-sans-v10-latin_cyrillic-700italic', 700, italic);
-.include-custom-font('Open Sans Extrabold', 'open-sans-v10-latin_cyrillic-800', 800, normal);
-.include-custom-font('Open Sans Extrabold Italic', 'open-sans-v10-latin_cyrillic-800italic', 800, italic);
-
-.adblock-recovery {
-    all: initial;
-    position: relative!important;
-    display: inline-block!important;
-    margin: 0 0 0 5px!important;
-    vertical-align: middle!important;
-
-    .adblock-recovery-status {
-        all: initial;
-        display: block!important;
-        width: 15px!important;
-        height: 17px!important;
-        vertical-align: middle!important;
-        cursor: pointer!important;
-        .bg('logo.svg');
-        opacity: .5!important;
-
-        &.adblock-recovery-status-1,
-        &.adblock-recovery-status-2,
-        &.adblock-recovery-status-4 {
-            .bg('logo-not-ok.svg');
-        }
-
-        &:hover, &.adblock-recovery-status-show {
-            opacity: 1!important;
-        }
-    }
-}
-
 .adblock-recovery-status-iframe {
     position: absolute!important;
     top: 0!important;
@@ -224,15 +184,6 @@
     }
 
     .adblock-recovery-do-not-agree {
-        background: @green;
-        border: none;
-        padding: 10px 15px;
         margin: 10px 0 0 0;
-        outline: none;
-        color: #fff;
-        cursor: pointer;
-        &:hover {
-            opacity: .9;
-        }
     }
 }

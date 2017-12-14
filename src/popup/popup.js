@@ -1,3 +1,7 @@
+/**
+ * Extension popup page
+ */
+
 /* global chrome */
 
 import {qs,qsa} from '../common/js/helpers';
@@ -10,7 +14,10 @@ const log = new logs();
 const sitename = qs('.adblock-recovery-popup__sitename');
 const techniquesList = qs('.adblock-recovery-popup__techniques-list');
 const optionsBtn = qs('.adblock-recovery-popup__options');
+const readModeBtn = qs('.adblock-recovery-popup__openinreadmode');
 const popup = qs('.adblock-recovery-popup');
+
+let currentPageUrl = null;
 
 /**
  * Getting website url and antiadblock techniques from userscript
@@ -21,13 +28,15 @@ const getSiteData = () => {
             const lastError = chrome.runtime.lastError;
 
             if (lastError) {
-                log.error(lastError.message);
+                log.error(lastError);
                 noData(tabs[0].url);
+                currentPageUrl = null;
                 return;
             }
 
             if (response && response.done) {
                 sitename.innerText = response.host;
+                currentPageUrl = response.href;
             }
 
             if (response.data) {
@@ -80,7 +89,8 @@ const appendData = (website) => {
             '</p></li>';
     }, '');
 
-    techniquesList.innerHTML = `<ul class="adblock-recovery-popup__status-icon ${text.statusClass}">${threats}</ul>`;
+    techniquesList.innerHTML =
+        `<ul class="adblock-recovery-popup__status-icon ${text.statusClass}">${threats}</ul>`;
 };
 
 const noData = (url) => {
@@ -91,6 +101,18 @@ const noData = (url) => {
     }
 };
 
+const openInReadmod = () => {
+    if (!currentPageUrl) {
+        return false;
+    }
+
+    chrome.runtime.sendMessage({
+        from: 'content',
+        subject: 'readmode',
+        href: currentPageUrl
+    });
+};
+
 window.addEventListener('DOMContentLoaded', function() {
     optionsBtn.addEventListener('click', function() {
         if (chrome.runtime.openOptionsPage) {
@@ -99,6 +121,10 @@ window.addEventListener('DOMContentLoaded', function() {
         } else {
             window.open(chrome.runtime.getURL('options.html'));
         }
+    });
+
+    readModeBtn.addEventListener('click', function() {
+        openInReadmod();
     });
 
     getSiteData();

@@ -56,7 +56,7 @@ export default class Highlightlinks {
 
         adblockRecovery = document.createElement('div');
         adblockRecovery.className = 'adblock-recovery';
-        adblockRecovery.setAttribute('data-href', el.hostname);
+        adblockRecovery.setAttribute('data-href', el.href);
         adblockRecovery.setAttribute('data-href-alt', elementData.domain);
         adblockRecovery.appendChild(adblockRecoveryIcon);
 

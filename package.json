@@ -1,6 +1,6 @@
 {
   "name": "adblock-recovery",
-  "version": "0.4.0",
+  "version": "0.1.0",
   "description": "Adblock Recovery extension",
   "main": "gulpfile.babel.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "test": "mocha-phantomjs test/test.html",
     "ghtest": "./node_modules/.bin/gulp tests-gh-pages",
     "locales": "./node_modules/.bin/gulp download-localizations",
-    "upload": "./node_modules/.bin/gulp upload-localization"
+    "upload": "./node_modules/.bin/gulp upload-localization",
+    "zip": "./node_modules/.bin/gulp zip"
   },
   "author": "VashBan",
   "devDependencies": {
@@ -35,6 +36,7 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^3.0.0",
     "gulp-watch": "^4.3.11",
+    "gulp-zip": "^4.0.0",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-inline-urls": "^1.2.0",
     "mocha": "^3.4.2",

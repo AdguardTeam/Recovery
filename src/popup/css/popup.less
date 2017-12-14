@@ -1,5 +1,6 @@
 @import "../../common/css/variables";
 @import "../../common/css/mixins";
+@import "../../common/css/elements";
 
 .include-custom-font('Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
 .include-custom-font('Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
@@ -123,20 +124,6 @@ body {
         cursor: pointer;
         outline: none;
         .bg('settings.svg');
-    }
-
-    .adblock-recovery-popup__details {
-        background: @green;
-        border: none;
-        padding: 10px 15px;
-        margin: 20px 0 0 0;
-        outline: none;
-        color: #fff;
-        cursor: pointer;
-
-        &:hover {
-            opacity: 0.9;
-        }
     }
 
     .adblock-recovery-popup__nodata {

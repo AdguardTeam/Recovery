@@ -96,7 +96,7 @@ export default class Utils {
         let currentEl;
 
         iconElements.forEach((el) => {
-            if(el.getAttribute('data-href') === href) {
+            if(el.getAttribute('data-href').indexOf(href) >= 0) {
                 currentEl = el;
             }
         });

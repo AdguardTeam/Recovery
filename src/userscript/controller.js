@@ -1,10 +1,13 @@
 import _ from 'lodash';
 import Urls from '../_data/urls.json';
 
+import {chromeRuntimeSend, chromeRuntimeListener} from './chrome.runtime';
+
 export default class Controller {
-    constructor(logs, view, highlightlinks, store) {
+    constructor(logs, view, highlightlinks, store, utils) {
         this.store = store;
         this.view = view;
+        this.utils = utils;
         this.highlightlinks = highlightlinks;
         this.logs = logs;
         this.observer = null;
@@ -20,6 +23,16 @@ export default class Controller {
         if (this.pageCheckRequirements(options)) {
             this.highlightlinks.show(this.check);
             this.mutationObserver();
+        }
+
+        if (this.utils.validatePage() && this.utils.checkVisibleAreaSize()) {
+            chromeRuntimeSend({
+                from: 'content',
+                subject: 'showPageAction',
+                data: this.checkLink(document.location.host)
+            });
+
+            chromeRuntimeListener(this);
         }
     }
 
@@ -95,5 +108,9 @@ export default class Controller {
      */
     checkLink(url) {
         return Urls.data.find((link) => url.indexOf(link.domain) >= 0);
+    }
+
+    readMode(content) {
+        this.view.openInReadmod(content);
     }
 }

@@ -1,53 +1,38 @@
 /* global chrome */
 
-export default class ChromeRuntime {
-    constructor(controller, utils) {
-        this.utils = utils;
-        this.controller = controller;
-        this.chrome = typeof(chrome) === 'undefined' ? null : chrome;
+const chromeRuntime = typeof(chrome) !== 'undefined' && chrome.runtime ? chrome.runtime : null;
 
-        if (this.chrome) {
-            this.init();
-            this.addListener();
-        }
+/**
+ * chrome.runtime listener which waiting messages from extension popup and returning data about the page
+ */
+export function chromeRuntimeListener(controller) {
+    if (!chromeRuntime) {
+        return false;
     }
 
-    init() {
-        if (!this.utils.validatePage() || !this.utils.checkVisibleAreaSize()) {
-            return false;
-        }
-
-        this.chrome.runtime.sendMessage({
-            from: 'content',
-            subject: 'showPageAction',
-            data: this.checkThePage()
-        });
-    }
-
-    /**
-     * chrome.runtime listener which waiting messages from extension popup and returning data about the page
-     */
-    addListener() {
-        const _this = this;
-
-        if (!this.utils.validatePage() || !this.utils.checkVisibleAreaSize()) {
-            return false;
+    chromeRuntime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.getData) {
+            sendResponse({
+                done: true,
+                host: document.location.host,
+                href: document.location.href,
+                data: controller.check(document.location.host)
+            });
         }
 
-        this.chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            if (!sender.tab) {
-                if (request.getData) {
-                    sendResponse({
-                        done: true,
-                        host: document.location.host,
-                        data: _this.checkThePage()
-                    });
-                }
-            }
-        });
+        if (request.showReadMode) {
+            controller.readMode(request.content);
+        }
+    });
+}
+
+/*
+ * sending messages to background.js
+ */
+export function chromeRuntimeSend(data) {
+    if (!chromeRuntime) {
+        return false;
     }
 
-    checkThePage() {
-        return this.controller.check(document.location.host);
-    }
+    chromeRuntime.sendMessage(data);
 }
