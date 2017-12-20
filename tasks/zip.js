@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import zip from 'gulp-zip';
 
 const paths = {
-    dest: 'dist/*'
+    dest: 'dist/**/*'
 };
 
 const createZip = () => {

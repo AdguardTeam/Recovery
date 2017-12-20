@@ -17,7 +17,7 @@ const optionsBtn = qs('.adblock-recovery-popup__options');
 const readModeBtn = qs('.adblock-recovery-popup__openinreadmode');
 const popup = qs('.adblock-recovery-popup');
 
-let currentPageUrl = null;
+let currentPageLocation = null;
 
 /**
  * Getting website url and antiadblock techniques from userscript
@@ -30,13 +30,13 @@ const getSiteData = () => {
             if (lastError) {
                 log.error(lastError);
                 noData(tabs[0].url);
-                currentPageUrl = null;
+                currentPageLocation = null;
                 return;
             }
 
             if (response && response.done) {
-                sitename.innerText = response.host;
-                currentPageUrl = response.href;
+                currentPageLocation = response.location;
+                sitename.innerText = response.location.host;
             }
 
             if (response.data) {
@@ -102,14 +102,14 @@ const noData = (url) => {
 };
 
 const openInReadmod = () => {
-    if (!currentPageUrl) {
+    if (!currentPageLocation) {
         return false;
     }
 
     chrome.runtime.sendMessage({
         from: 'content',
         subject: 'readmode',
-        href: currentPageUrl
+        location: currentPageLocation
     });
 };
 

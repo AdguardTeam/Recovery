@@ -4,8 +4,8 @@
   "description": "Adblock Recovery extension",
   "main": "gulpfile.babel.js",
   "scripts": {
-    "start": "NODE_ENV=prod ./node_modules/.bin/gulp options && NODE_ENV=prod ./node_modules/.bin/gulp extension && NODE_ENV=prod ./node_modules/.bin/gulp popup",
-    "dev": "./node_modules/.bin/gulp options && ./node_modules/.bin/gulp extension && ./node_modules/.bin/gulp popup && ./node_modules/.bin/gulp watch",
+    "start": "NODE_ENV=prod ./node_modules/.bin/gulp options && NODE_ENV=prod ./node_modules/.bin/gulp extension && NODE_ENV=prod ./node_modules/.bin/gulp popup && ./node_modules/.bin/gulp readmode",
+    "dev": "./node_modules/.bin/gulp options && ./node_modules/.bin/gulp extension && ./node_modules/.bin/gulp popup && ./node_modules/.bin/gulp readmode && ./node_modules/.bin/gulp watch",
     "watch": "./node_modules/.bin/gulp watch",
     "test": "mocha-phantomjs test/test.html",
     "ghtest": "./node_modules/.bin/gulp tests-gh-pages",

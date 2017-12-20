@@ -1,5 +1,5 @@
 /* global ADBLOCKRECOVERYSTYLE */
-import {$on, $delegate, qsa, qs, appendCSS} from '../common/js/helpers';
+import {$on, $delegate, qsa, qs} from '../common/js/helpers';
 import logs from '../common/js/logs';
 
 import Urls from '../_data/urls.json';
@@ -85,11 +85,11 @@ export default class View {
             }, true);
 
             $delegate(doc, '.adblock-recovery-status-readmod', 'click', () => {
-                chromeRuntimeSend({
-                    from: 'content',
-                    subject: 'readmode',
+                // `location` variable is like document.location
+                let location = {
                     href: href
-                });
+                };
+                _this.gettingContentForReadMode(location);
             }, true);
         } catch (ex) {
             logs.error(ex);
@@ -145,88 +145,11 @@ export default class View {
         el.style.transform = transform;
     }
 
-    gettingContentForReadMode(e) {
+    gettingContentForReadMode(location) {
         chromeRuntimeSend({
             from: 'content',
             subject: 'readmode',
-            href: e.target.href
+            location: location
         });
-    }
-
-    openInReadmod(responseText) {
-        const _this = this;
-        let allredyDef = qs('.adblock-recovery-readmode');
-
-        if (allredyDef) {
-            allredyDef.remove();
-        }
-
-        let content = new DOMParser().parseFromString(responseText, 'text/html');
-
-        // remove scripts, styles, images
-        let elements = qsa('script, link, noscript, style, img', content);
-
-        for (let index = elements.length - 1; index >= 0; index--) {
-            elements[index].parentNode.removeChild(elements[index]);
-        }
-
-        // remove inline styles
-        let inlineStyles = qsa('[style]', content);
-
-        for (let index = inlineStyles.length - 1; index >= 0; index--) {
-            inlineStyles[index].removeAttribute('style');
-        }
-
-        const readmodBlock = document.createElement('div');
-        const iframe = document.createElement('iframe');
-        const closeBtn = document.createElement('button');
-
-        readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
-        closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
-        iframe.setAttribute('frameBorder', 0);
-        iframe.setAttribute('allowTransparency', 'false');
-
-        $on(closeBtn, 'click', this.closeReadMod);
-
-        iframe.onload = function() {
-            try {
-                const doc = iframe.contentDocument;
-
-                // ADBLOCKRECOVERYSTYLE - global styles string which created by the gulp
-                const style = '<style type="text/css">' + ADBLOCKRECOVERYSTYLE + '</style>';
-                doc.open();
-                doc.write(
-                    `<html><head> ${style} </head><body><div class="options"><div class="container"> ${content.body.outerHTML} </div></div></body></html>`
-                );
-                doc.close();
-                iframe.style.setProperty('display', 'block', 'important');
-
-                $delegate(doc, 'a', 'click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    _this.gettingContentForReadMode(e);
-                }, true);
-            } catch (ex) {
-                logs.error(ex);
-            }
-        };
-
-        readmodBlock.appendChild(closeBtn);
-        readmodBlock.appendChild(iframe);
-
-        if (!qs('#adblock-recovery-styles')) {
-            appendCSS(ADBLOCKRECOVERYSTYLE, null, 'adblock-recovery-styles');
-        }
-
-        document.body.appendChild(readmodBlock);
-    }
-
-    closeReadMod() {
-        let readmodBlock = qs('.adblock-recovery-readmode');
-
-        if (readmodBlock) {
-            readmodBlock.remove();
-            readmodBlock = null;
-        }
     }
 }

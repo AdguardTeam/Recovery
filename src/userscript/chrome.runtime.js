@@ -14,8 +14,7 @@ export function chromeRuntimeListener(controller) {
         if (request.getData) {
             sendResponse({
                 done: true,
-                host: document.location.host,
-                href: document.location.href,
+                location: document.location,
                 data: controller.check(document.location.host)
             });
         }

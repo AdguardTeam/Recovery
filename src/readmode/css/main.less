@@ -1,7 +1,3 @@
-@import "../../common/css/mixins";
-@import "../../common/css/variables";
-@import "../../common/css/elements";
-
 .include-custom-font('Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
 .include-custom-font('Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
 .include-custom-font('Open Sans', 'open-sans-v10-latin_cyrillic-regular', 400, normal);
@@ -13,5 +9,51 @@
 .include-custom-font('Open Sans Extrabold', 'open-sans-v10-latin_cyrillic-800', 800, normal);
 .include-custom-font('Open Sans Extrabold Italic', 'open-sans-v10-latin_cyrillic-800italic', 800, italic);
 
-@import "highlight-links";
-@import "popover";
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    position: relative;
+}
+
+body {
+    position: relative;
+    min-height: 100%;
+    min-width: 980px;
+    font: 16px/1.625 "Open Sans",Arial,sans-serif;
+    color: #262626;
+    background-color: #fff;
+    margin: 0;
+}
+
+a {
+    color: @green;
+    text-decoration: underline;
+    outline: 0;
+}
+
+.readmode {
+    .container {
+        width: 70%;
+        margin: auto;
+    }
+
+    .adblock-recovery-readmode-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        left: auto;
+        bottom: auto;
+        width: 50px;
+        display: block;
+        height: 50px;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 40pt;
+        line-height: 40pt;
+    }
+}

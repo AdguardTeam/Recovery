@@ -24,7 +24,7 @@ export function $delegate(target, selector, type, handler, capture) {
         let i = potentialElements.length;
 
         while (i--) {
-            if (potentialElements[i] === targetElement) {
+            if (potentialElements[i] === targetElement || potentialElements[i].contains(targetElement)) {
                 handler.call(targetElement, event);
                 break;
             }

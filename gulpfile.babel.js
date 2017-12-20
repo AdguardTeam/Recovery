@@ -6,6 +6,7 @@ import testsGhPages from './tasks/tests-gh-pages';
 import downloadLocalizations from './tasks/download-localizations';
 import uploadLocalization from './tasks/upload-localization';
 import zip from './tasks/zip';
+import readmode from './tasks/readmode';
 
 gulp.task('options', options);
 gulp.task('popup', popup);
@@ -14,7 +15,8 @@ gulp.task('tests-gh-pages', testsGhPages);
 gulp.task('download-localizations', downloadLocalizations);
 gulp.task('upload-localization', uploadLocalization);
 gulp.task('zip', zip);
+gulp.task('readmode', readmode);
 
-const watch = () => gulp.watch('src/**/*.{jpg,png,svg,json,html,js,less}', gulp.series(options, popup, extension));
+const watch = () => gulp.watch('src/**/*.{jpg,png,svg,json,html,js,less}', gulp.series(options, readmode, popup, extension));
 
 gulp.task('watch', watch);
