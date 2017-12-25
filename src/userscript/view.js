@@ -35,7 +35,6 @@ export default class View {
         iframe.setAttribute('class', 'adblock-recovery-status-iframe');
         iframe.setAttribute('frameBorder', 0);
         iframe.setAttribute('width', 350);
-        iframe.setAttribute('height', 300);
         iframe.setAttribute('allowTransparency', 'true');
 
         this.moveElementTo(iframe, rect.left, rect.top);
@@ -79,6 +78,9 @@ export default class View {
             doc.write('<html><head>' + style + '</head><body class="adblock-recovery-status-body">' + content + '</body></html>');
             doc.close();
             iframe.style.setProperty('display', 'block', 'important');
+
+            // setting iframe height dynamically based on inner content
+            iframe.setAttribute('height', iframe.contentWindow.document.body.scrollHeight || 370);
 
             $delegate(doc, '.adblock-recovery-status-close', 'click', () => {
                 _this.closeLinksStatus();

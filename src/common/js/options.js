@@ -14,3 +14,7 @@ export const commonOptions = {
 };
 
 export const storeName = 'adblockRecoveryStoreCommon';
+
+// TODO: remove this
+export const googleSpreadSheet = 'https://spreadsheets.google.com/feeds/list/1e2qnCK1PzmQiAaH1UjqYjetxV6cwAeoYxKohGOJkNtc/od6/public/values?alt=json';
+export const googleSpreadSheetPrefix = 'gsx$';

@@ -5,11 +5,6 @@
             "issueLink": "https://github.com/"
         },
         {
-            "domain": "cnews.ru",
-            "categories": [1, 2],
-            "issueLink": "https://github.com/"
-        },
-        {
             "domain": "habrahabr.ru",
             "categories": [4],
             "issueLink": "https://github.com/"

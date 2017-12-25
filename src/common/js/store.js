@@ -1,11 +1,12 @@
 /* global chrome */
-import {commonOptions} from './options';
+import {commonOptions, googleSpreadSheet} from './options';
 
 export default class Store {
     constructor() {
         const localStorage = window.localStorage;
 
         this.chrome = typeof(chrome) === 'undefined' ? null : chrome;
+        this.defaultoptions = commonOptions;
 
         // jshint ignore: start
         this.getData = async() => {
@@ -14,19 +15,26 @@ export default class Store {
             if (options && Object.keys(options).length !== 0) {
                 return options;
             } else {
-                return commonOptions;
+                return this.defaultoptions;
             }
         }
         this.updateData = async(id, value) => {
             let options = await this.getFromStorageAsync();
 
             if (options && Object.keys(options).length === 0) {
-                options = commonOptions;
+                options = this.defaultoptions;
             }
 
             options[id].show = !value;
 
             this.setLocalStorage(options);
+        }
+
+        // TODO: remove this
+        this.getDataFromGoogleSpreadSheet = async() => {
+            let data = await this.getFromSpreadSheetAsync();
+
+            return data;
         }
         // jshint ignore: end
 
@@ -62,5 +70,13 @@ export default class Store {
         });
     }
 
+    // TODO: remove this
+    getFromSpreadSheetAsync() {
+        return new Promise(resolve => {
+            fetch(googleSpreadSheet).then(function(response) {
+                resolve(response.json());
+            });
+        });
+    }
 
 }

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import Urls from '../_data/urls.json';
 
+import {googleSpreadSheetPrefix} from '../common/js/options';
+
 import {chromeRuntimeSend, chromeRuntimeListener} from './chrome.runtime';
 
 export default class Controller {
@@ -11,12 +13,45 @@ export default class Controller {
         this.highlightlinks = highlightlinks;
         this.logs = logs;
         this.observer = null;
+        this.urls = Urls.data;
 
         store.getData().then(response => {
             this.init(response);
         });
 
+        // TODO: remove this
+        store.getDataFromGoogleSpreadSheet().then(response => {
+            for (let i of response.feed.entry) {
+                let domain = i[googleSpreadSheetPrefix + 'domain'].$t;
+
+                let catigories = i[googleSpreadSheetPrefix + 'categories'].$t;
+
+                if (catigories) {
+                    catigories = this.parseCategories(catigories);
+                }
+
+                let issueLink = i[googleSpreadSheetPrefix + 'issuelink'].$t;
+
+                let paymentLink = i[googleSpreadSheetPrefix + 'paymentlink'].$t;
+
+                this.urls.push({
+                    'domain': domain,
+                    'categories': catigories,
+                    'issueLink': issueLink,
+                    'paymentLink': paymentLink
+                });
+            }
+        });
+
         this.check = this.checkLink.bind(this);
+    }
+
+    parseCategories(catigories) {
+        catigories = catigories.split(',');
+
+        return _.map(catigories, (n) => {
+            return parseInt(n);
+        });
     }
 
     init(options) {
@@ -107,7 +142,7 @@ export default class Controller {
      * @param  {String} url    url link
      */
     checkLink(url) {
-        return Urls.data.find((link) => url.indexOf(link.domain) >= 0);
+        return this.urls.find((link) => url.indexOf(link.domain) >= 0);
     }
 
     readMode(content) {
