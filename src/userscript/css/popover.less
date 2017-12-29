@@ -109,7 +109,7 @@
             margin: 10px 0;
         }
 
-        &.status-icon {
+        &.status-list {
             li:before {
                 position: absolute;
                 content: ' ';
@@ -120,6 +120,10 @@
                 bottom: 0;
                 margin: auto;
                 .bg('logo.svg');
+            }
+
+            li.status-icon-warning:before {
+                .bg('logo-not-ok.svg');
             }
 
             .adblock-recovery-threat-name {
@@ -160,12 +164,6 @@
                         opacity: 1;
                         visibility: visible;
                     }
-                }
-            }
-
-            &.status-icon-warning {
-                li:before {
-                    .bg('logo-not-ok.svg');
                 }
             }
         }

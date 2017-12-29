@@ -41,6 +41,14 @@ export default class Controller {
                     'paymentLink': paymentLink
                 });
             }
+
+            if (this.utils.validatePage() && this.utils.checkVisibleAreaSize()) {
+                chromeRuntimeSend({
+                    from: 'content',
+                    subject: 'showPageAction',
+                    data: this.checkLink(document.location.host)
+                });
+            }
         });
 
         this.check = this.checkLink.bind(this);

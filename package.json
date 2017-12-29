@@ -1,6 +1,6 @@
 {
   "name": "adblock-recovery",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Adblock Recovery extension",
   "main": "gulpfile.babel.js",
   "scripts": {

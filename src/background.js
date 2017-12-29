@@ -35,11 +35,24 @@ const requestForReadMode = (msg) => {
 
     let url = msg.location.origin || msg.location.href;
 
-    url = `${chrome.runtime.getURL('readmode.html')}?url=${url}`;
+    if (!url) {
+        return false;
+    }
 
-    chrome.tabs.create({
-        url: url
-    });
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, {showReadMode: true, content: xhr.responseText}, () => {
+                    if (chrome.runtime.lastError) {
+                        return false;
+                    }
+                });
+            });
+        }
+    };
+    xhr.send();
 };
 
 /**

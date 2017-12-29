@@ -70,27 +70,23 @@ const appendData = (website) => {
     text.threats = [];
 
     website.data.categories.forEach((id) => {
-        if (categories[id].warning) {
-            text.statusClass = 'status-icon-warning';
-        }
-
         text.threats.push(categories[id]);
     });
 
     let threats = text.threats.reduce((text, threat) => {
+        let icon = threat.warning ? 'status-icon-warning' : 'status-icon-passed';
+
         return text +
-            '<li><p>' +
-            '<span class="adblock-recovery-status-name">' + i18n(threat.name) + '</span>' +
-            '<span class="adblock-recovery-status-tooltip">' +
-            '<span class="adblock-recovery-status-tooltip-text">' +
-            i18n(threat.description) +
-            '</span>' +
-            '</span>' +
-            '</p></li>';
+            `<li class="adblock-recovery-popup__status-icon ${icon}"><p>
+            <span class="adblock-recovery-status-name">${i18n(threat.name)}</span>
+            <span class="adblock-recovery-status-tooltip">
+                <span class="adblock-recovery-status-tooltip-text">${i18n(threat.description)}</span>
+            </span>
+            </p></li>`;
     }, '');
 
     techniquesList.innerHTML =
-        `<ul class="adblock-recovery-popup__status-icon ${text.statusClass}">${threats}</ul>`;
+        `<ul>${threats}</ul>`;
 };
 
 const noData = (url) => {

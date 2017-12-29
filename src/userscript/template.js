@@ -20,7 +20,9 @@ export default class Template {
         });
 
         let threats = text.threats.reduce((text, threat) => {
-            return `${text}<li>
+            let icon = threat.warning ? 'warning' : 'passed';
+
+            return `${text}<li class="status-icon-${icon}">
                 <p>
                     <b class="adblock-recovery-threat-name">${i18n(escapeForHTML(threat.name))}</b>
                     <span class="adblock-recovery-status-tooltip">
@@ -39,9 +41,9 @@ export default class Template {
                 ${i18n('status')}: ${escapeForHTML(text.status)}
             </p>
             <p>${escapeForHTML(data.domain)} ${i18n('mechanisms')}:</p>
-            <ul class="status-icon status-icon-${escapeForHTML(text.statusClass)}">${threats}</ul>
-            <button class="adblock-recovery-btn adblock-recovery-do-not-agree" i18n="do_not_agree">Do not agree?</button>
-            <button class="adblock-recovery-btn adblock-recovery-status-readmod" i18n="open_read_view">Open in readmode</button>
+            <ul class="status-list">${threats}</ul>
+            <button class="adblock-recovery-btn adblock-recovery-do-not-agree">${i18n('do_not_agree')}</button>
+            <button class="adblock-recovery-btn adblock-recovery-status-readmod">${i18n('open_read_view')}</button>
         </div>`;
     }
 }
