@@ -15,3 +15,8 @@ Download localization files (requires download file settings `oneskyapp.json`):
 Upload localization file to oneskyapp (_locales/en.json):
 
     $ npm run upload
+
+### Development build
+
+Built automatically on every new commit:
+https://AdguardTeam.github.io/Recovery/archive.zip

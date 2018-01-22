@@ -1,12 +1,13 @@
 import gulp from 'gulp';
 import md5 from 'gulp-hash-creator';
-import oneskyapp from '../oneskyapp';
 import fs from 'fs';
 import request from 'request';
 
 const path = {
     src: './src/_locales/en.json',
 };
+
+let oneskyapp;
 
 function hashString(stringContent) {
     return md5({
@@ -15,6 +16,12 @@ function hashString(stringContent) {
 }
 
 function prepare() {
+    try {
+        oneskyapp = fs.readFileSync('../oneskyapp.json').toString();
+    } catch (err) {
+        return false;
+    }
+
     const timestamp = Math.round(new Date().getTime() / 1000);
     const formData = {
         'file': fs.createReadStream(path.src),
@@ -31,6 +38,10 @@ function prepare() {
 
 function uploadf() {
     const data = prepare();
+
+    if (!oneskyapp) {
+        return false;
+    }
 
     return request.post({
         url: oneskyapp.url + oneskyapp.projectId + '/files',

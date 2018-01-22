@@ -1,7 +1,7 @@
+import fs from 'fs';
 import gulp from 'gulp';
 import downloadStream from 'gulp-download-stream';
 import md5 from 'gulp-hash-creator';
-import oneskyapp from '../oneskyapp';
 
 const paths = {
     src: 'src/_locales/',
@@ -18,6 +18,14 @@ function prepare() {
         locales: ['en', 'ru'],
         sourceFile: 'en.json'
     };
+
+    let oneskyapp;
+
+    try {
+        oneskyapp = fs.readFileSync('../oneskyapp.json').toString();
+    } catch (err) {
+        return false;
+    }
 
     options = Object.assign(options, oneskyapp);
 

@@ -8,7 +8,7 @@ const paths = {
 const createZip = () => {
     return gulp.src(paths.dest)
       .pipe(zip('archive.zip'))
-      .pipe(gulp.dest('./out-zip/'));
+      .pipe(gulp.dest('./dist/'));
 };
 
 export default gulp.series(createZip);
