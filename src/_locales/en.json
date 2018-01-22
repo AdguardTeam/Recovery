@@ -68,11 +68,8 @@
     "footer_powered_by": {
         "message": "Powered by"
     },
-    "options_title": {
-        "message": "Settings"
-    },
-    "options_header": {
-        "message": "Settings"
+    "options_sites": {
+        "message": "Sites"
     },
     "options_settings_filters": {
         "message": "Filters"

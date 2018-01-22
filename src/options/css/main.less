@@ -43,107 +43,14 @@ input[type="checkbox"]:checked+.form-ui-txt:before {
     background-position: 0 -30px;
 }
 
-.header {
-    padding: 20px 0;
-    font-size: 16px;
-    line-height: 19px;
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.section-head {
-    margin-top: 32px;
-    margin-bottom: 24px;
-    font: 700 22px/1.2 "Open Sans",Arial,sans-serif;
-    color: #bbb;
-}
-
 .container {
-    margin-right: auto;
-    margin-left: auto;
     padding-left: 10px;
     padding-right: 10px;
 }
-@media (min-width: 1240px) {
-    .container {
-        width: 960px;
-    }
-}
-
-.header_lead,
-.header_sep,
-.logo {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.header_lead {
-    margin: 20px 0 0;
-}
-
-.header_sep {
-    font-size: 22px;
-    color: @green;
-    margin: 20px 10px 0;
-}
-
-.logo {
-    margin: 0;
-    font: 300 40px/1.2 "Open Sans",Arial,sans-serif;
-    color: #333;
-
-    a {
-        color: #333;
-        text-decoration: none;
-    }
-}
-
-.page-head {
-    margin: 0 0 32px;
-    font: 300 40px/1.2 "Open Sans",Arial,sans-serif;
-    color: #666;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    min-width: 100%;
-    padding: 43px 0;
-    border-top: 1px solid #d9d9d9;
-    font-size: 16px;
-    line-height: 20px;
-}
-
-.footer_powered,
-.footer_powered:hover {
-    color: #262626;
-    text-decoration: none;
-}
-
-.footer_powered_text {
-    position: relative;
-    top: 1px;
-    margin: 0 2px 0 0;
-}
-
-.footer-menu_i {
-    float: left;
-    margin: 0 40px 0 0;
-}
-
-.footer-menu_i a {
-    color: #000;
-    text-decoration: none;
-}
-
-.footer_powered {
-    float: right;
-}
-
-
 
 .options {
     padding: 20px 0 140px;
+    margin: 0px 80px;
 
     .form-ui input[type="checkbox"],
     .form-ui input[type="radio"] {
@@ -186,5 +93,42 @@ input[type="checkbox"]:checked+.form-ui-txt:before {
     .form-ui-txt {
         display: inline-block;
         vertical-align: top;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        min-width: 100%;
+        padding: 43px 0;
+        border-top: 1px solid #d9d9d9;
+        font-size: 16px;
+        line-height: 20px;
+
+        .footer_powered,
+        .footer_powered:hover {
+            color: #262626;
+            text-decoration: none;
+        }
+
+        .footer_powered_text {
+            position: relative;
+            top: 1px;
+            margin: 0 2px 0 0;
+        }
+
+        .footer-menu_i {
+            float: left;
+            margin: 0 40px 0 0;
+        }
+
+        .footer-menu_i a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .footer_powered {
+            float: right;
+        }
     }
 }

@@ -91,7 +91,16 @@ export default class View {
                 let location = {
                     href: href
                 };
+
+
+                const readmodBlock = document.createElement('div');
+                const closeBtn = document.createElement('button');
+                readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
+                closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
+                readmodBlock.appendChild(closeBtn);
+                document.body.appendChild(readmodBlock);
                 _this.gettingContentForReadMode(location);
+
 
                 // let fram = document.createElement('iframe');
                 // fram.setAttribute('src', 'chrome-extension://gmeabhofhmlffbbpohfmfcknihdpgffh/readmode.html?url=https://cnews.ru/');
@@ -160,18 +169,17 @@ export default class View {
         });
     }
 
+    /*
+     * Inserting readmode modal
+     */
     openInReadmod(responseText) {
         const _this = this;
-        let allredyDef = qs('.adblock-recovery-readmode');
-
-        if (allredyDef) {
-            allredyDef.remove();
-        }
+        let allredyDef = qs('.adblock-recovery-readmode > iframe');
 
         let content = new DOMParser().parseFromString(responseText, 'text/html');
 
         // remove scripts, styles, images
-        let elements = qsa('script, link, noscript, style, img', content);
+        let elements = qsa('script, link, noscript, style, img, form, input, button, textarea', content);
 
         for (let index = elements.length - 1; index >= 0; index--) {
             elements[index].parentNode.removeChild(elements[index]);
@@ -184,51 +192,51 @@ export default class View {
             inlineStyles[index].removeAttribute('style');
         }
 
-        const readmodBlock = document.createElement('div');
-        const iframe = document.createElement('iframe');
-        const closeBtn = document.createElement('button');
+        let readmodBlock = qs('.adblock-recovery-readmode');
+        let closeBtn = qs('.adblock-recovery-readmode-close', readmodBlock);
+        let iframe;
 
-        readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
-        closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
-        iframe.setAttribute('frameBorder', 0);
-        iframe.setAttribute('allowTransparency', 'false');
+        if (!allredyDef) {
+            iframe = document.createElement('iframe');
+            $on(closeBtn, 'click', this.closeReadMod);
+            readmodBlock.appendChild(iframe);
 
-        $on(closeBtn, 'click', this.closeReadMod);
+            // TODO: take out attributes
+            iframe.setAttribute('frameBorder', 0);
+            iframe.setAttribute('allowTransparency', 'false');
+        } else {
+            iframe = allredyDef;
+            iframe.contentDocument.body.scrollTop = 0;
+        }
 
-        iframe.onload = function() {
-            try {
-                const doc = iframe.contentDocument;
+        try {
+            const doc = iframe.contentDocument;
+            const style = '<style type="text/css">body {position: relative;font: 16px/1.625 "Open Sans",Arial,sans-serif;color: #262626;}a{color:#68BC71;text-decoration: underline;outline: 0;}</style>';
+            doc.open();
+            doc.write(
+                `<html><head> ${style} </head><body><div class="options"><div class="container"> ${content.body.outerHTML} </div></div></body></html>`
+            );
+            doc.close();
+            iframe.style.setProperty('display', 'block', 'important');
 
-                // ADBLOCKRECOVERYSTYLE - global styles string which created by the gulp
-                const style = '<style type="text/css">' + ADBLOCKRECOVERYSTYLE + '</style>';
-                doc.open();
-                doc.write(
-                    `<html><head> ${style} </head><body><div class="options"><div class="container"> ${content.body.outerHTML} </div></div></body></html>`
-                );
-                doc.close();
-                iframe.style.setProperty('display', 'block', 'important');
+            $delegate(doc, 'a', 'click', (e) => {
+                let location = {
+                    href: e.target.href
+                };
+                e.preventDefault();
+                e.stopPropagation();
+                iframe.style.setProperty('display', 'none', 'important');
+                _this.gettingContentForReadMode(location);
+            }, true);
+        } catch (ex) {
+            logs.error(ex);
+        }
 
-                $delegate(doc, 'a', 'click', (e) => {
-                    let location = {
-                        href: e.target.href
-                    };
-                    e.preventDefault();
-                    e.stopPropagation();
-                    _this.gettingContentForReadMode(location);
-                }, true);
-            } catch (ex) {
-                logs.error(ex);
-            }
-        };
 
-        readmodBlock.appendChild(closeBtn);
-        readmodBlock.appendChild(iframe);
 
         if (!qs('#adblock-recovery-styles')) {
             appendCSS(ADBLOCKRECOVERYSTYLE, null, 'adblock-recovery-styles');
         }
-
-        document.body.appendChild(readmodBlock);
     }
 
     closeReadMod() {

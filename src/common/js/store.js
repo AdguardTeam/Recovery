@@ -1,5 +1,5 @@
 /* global chrome */
-import {commonOptions, googleSpreadSheet} from './options';
+import {commonOptions} from './options';
 
 export default class Store {
     constructor() {
@@ -28,13 +28,6 @@ export default class Store {
             options[id].show = !value;
 
             this.setLocalStorage(options);
-        }
-
-        // TODO: remove this
-        this.getDataFromGoogleSpreadSheet = async() => {
-            let data = await this.getFromSpreadSheetAsync();
-
-            return data;
         }
         // jshint ignore: end
 
@@ -69,14 +62,4 @@ export default class Store {
             });
         });
     }
-
-    // TODO: remove this
-    getFromSpreadSheetAsync() {
-        return new Promise(resolve => {
-            fetch(googleSpreadSheet).then(function(response) {
-                resolve(response.json());
-            });
-        });
-    }
-
 }

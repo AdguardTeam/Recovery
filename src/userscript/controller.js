@@ -19,45 +19,52 @@ export default class Controller {
             this.init(response);
         });
 
-        // TODO: remove this
-        store.getDataFromGoogleSpreadSheet().then(response => {
-            for (let i of response.feed.entry) {
-                let domain = i[googleSpreadSheetPrefix + 'domain'].$t;
-
-                let catigories = i[googleSpreadSheetPrefix + 'categories'].$t;
-
-                if (catigories) {
-                    catigories = this.parseCategories(catigories);
-                }
-
-                let issueLink = i[googleSpreadSheetPrefix + 'issuelink'].$t;
-
-                let paymentLink = i[googleSpreadSheetPrefix + 'paymentlink'].$t;
-
-                this.urls.push({
-                    'domain': domain,
-                    'categories': catigories,
-                    'issueLink': issueLink,
-                    'paymentLink': paymentLink
-                });
-            }
-
-            if (this.utils.validatePage() && this.utils.checkVisibleAreaSize()) {
-                chromeRuntimeSend({
-                    from: 'content',
-                    subject: 'showPageAction',
-                    data: this.checkLink(document.location.host)
-                });
-            }
+        chromeRuntimeSend({
+            from: 'content',
+            subject: 'getDataFromSpreadSheet'
         });
 
         this.check = this.checkLink.bind(this);
     }
 
-    parseCategories(catigories) {
-        catigories = catigories.split(',');
+    // TODO: remove this after release
+    dataFromGoogleSpreadSheet(response) {
+        response = JSON.parse(response);
 
-        return _.map(catigories, (n) => {
+        for (let i of response.feed.entry) {
+            let domain = i[googleSpreadSheetPrefix + 'domain'].$t;
+
+            let categories = i[googleSpreadSheetPrefix + 'categories'].$t;
+
+            if (categories) {
+                categories = this.parseCategories(categories);
+            }
+
+            let issueLink = i[googleSpreadSheetPrefix + 'issuelink'].$t;
+
+            let paymentLink = i[googleSpreadSheetPrefix + 'paymentlink'].$t;
+
+            this.urls.push({
+                'domain': domain,
+                'categories': categories,
+                'issueLink': issueLink,
+                'paymentLink': paymentLink
+            });
+        }
+
+        if (this.utils.validatePage() && this.utils.checkVisibleAreaSize()) {
+            chromeRuntimeSend({
+                from: 'content',
+                subject: 'showPageAction',
+                data: this.checkLink(document.location.host)
+            });
+        }
+    }
+
+    parseCategories(categories) {
+        categories = categories.split(',');
+
+        return _.map(categories, (n) => {
             return parseInt(n);
         });
     }

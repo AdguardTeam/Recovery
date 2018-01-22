@@ -22,6 +22,10 @@ export function chromeRuntimeListener(controller) {
         if (request.showReadMode) {
             controller.readMode(request.content);
         }
+
+        if (request.dataFromSpredSheet) {
+            controller.dataFromGoogleSpreadSheet(request.content);
+        }
     });
 }
 
