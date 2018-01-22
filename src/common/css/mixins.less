@@ -1,0 +1,14 @@
+.include-custom-font(@family:Arial, @src: '', @style: normal, @weight: normal) {
+    @font-face {
+        font-family: @family;
+        src: local(@family),
+            url('../../common/fonts/@{src}.ttf') format('truetype');
+        font-weight: @weight;
+        font-style: @style;
+    }
+}
+
+.bg(@src:'', @style: no-repeat) {
+    background: url('../../common/img/@{src}') @style;
+    background-size: contain;
+}

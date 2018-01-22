@@ -1,0 +1,72 @@
+@keyframes clockwise {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.adblock-recovery-readmode {
+    all: initial;
+    position: absolute!important;
+    top: 0!important;
+    left: 0!important;
+    z-index: 99999999!important;
+    position: fixed!important;
+    width: 100%!important;
+    height: 100%!important;
+    background: rgba(0,0,0,.6)!important;
+
+    &:before {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        left: 50%;
+        top: 50%;
+        width: 60px;
+        height: 60px;
+        margin-top: -30px;
+        margin-left: -30px;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 47.6 47.6'%3E%3Cpath opacity='.235' fill='%23979797' d='M44.4 11.9l-5.2 3c1.5 2.6 2.4 5.6 2.4 8.9 0 9.8-8 17.8-17.8 17.8-6.6 0-12.3-3.6-15.4-8.9l-5.2 3C7.3 42.8 15 47.6 23.8 47.6c13.1 0 23.8-10.7 23.8-23.8 0-4.3-1.2-8.4-3.2-11.9z'/%3E%3Cpath fill='%2366b574' d='M3.2 35.7C0 30.2-.8 23.8.8 17.6 2.5 11.5 6.4 6.4 11.9 3.2 17.4 0 23.8-.8 30 .8c6.1 1.6 11.3 5.6 14.4 11.1l-5.2 3c-2.4-4.1-6.2-7.1-10.8-8.3C23.8 5.4 19 6 14.9 8.4s-7.1 6.2-8.3 10.8c-1.2 4.6-.6 9.4 1.8 13.5l-5.2 3z'/%3E%3C/svg%3E");
+        will-change: transform;
+        animation: clockwise 2s linear infinite;
+    }
+
+    .adblock-recovery-readmode-close {
+        position: absolute;
+        top: 20px;
+        right: 5%;
+        left: auto;
+        bottom: auto;
+        width: 50px;
+        display: block;
+        height: 50px;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #fff;
+        background: @green;
+        &::after {
+            content: '×';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            font-size: 40pt;
+            line-height: 38pt;
+        }
+    }
+
+    iframe {
+        all: initial;
+        width: 70%!important;
+        height: 100%!important;
+        margin: auto!important;
+        background: #fff!important;
+        padding: 0 0 0 40px!important;
+    }
+}

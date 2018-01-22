@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Adblock Recovery</title>
+        <link rel="stylesheet" href="popup.css">
+    </head>
+    <body>
+        <div class="adblock-recovery-popup">
+            <h1>
+                <b class="adblock-recovery-popup__logo">Adblock Recovery</b>
+                <button class="adblock-recovery-popup__options"></button>
+            </h1>
+            <h2>
+                <b class="adblock-recovery-popup__sitename"></b>
+            </h2>
+            <div class="adblock-recovery-popup__data">
+                <p class="adblock-recovery-popup__techniques" i18n="website_using_anti_adblocking_techniques"></p>
+                <div class="adblock-recovery-popup__techniques-list"></div>
+                <button class="adblock-recovery-btn adblock-recovery-popup__details" i18n="do_not_agree">Do not agree?</button>
+                <button class="adblock-recovery-btn adblock-recovery-popup__openinreadmode" i18n="open_read_view">Open this site in readmode</button>
+            </div>
+
+            <div class="adblock-recovery-popup__nodata">
+                <p i18n="no_data">No data</p>
+                <button class="adblock-recovery-btn adblock-recovery-popup__details" i18n="do_not_agree">Do not agree?</button>
+            </div>
+        </div>
+
+        <script src="popup.js"></script>
+    </body>
+</html>

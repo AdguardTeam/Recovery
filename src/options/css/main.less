@@ -1,0 +1,134 @@
+.include-custom-font('Open Sans Light', 'open-sans-v10-latin_cyrillic-300', 300, normal);
+.include-custom-font('Open Sans Light Italic', 'open-sans-v10-latin_cyrillic-300italic', 300, italic);
+.include-custom-font('Open Sans', 'open-sans-v10-latin_cyrillic-regular', 400, normal);
+.include-custom-font('Open Sans Italic', 'open-sans-v10-latin_cyrillic-italic', 400, italic);
+.include-custom-font('Open Sans Semibold', 'open-sans-v10-latin_cyrillic-600', 600, normal);
+.include-custom-font('Open Sans Semibold Italic', 'open-sans-v10-latin_cyrillic-600italic', 600, italic);
+.include-custom-font('Open Sans Bold', 'open-sans-v10-latin_cyrillic-700', 700, normal);
+.include-custom-font('Open Sans Bold Italic', 'open-sans-v10-latin_cyrillic-700italic', 700, italic);
+.include-custom-font('Open Sans Extrabold', 'open-sans-v10-latin_cyrillic-800', 800, normal);
+.include-custom-font('Open Sans Extrabold Italic', 'open-sans-v10-latin_cyrillic-800italic', 800, italic);
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    position: relative;
+}
+
+body {
+    position: relative;
+    min-height: 100%;
+    min-width: 980px;
+    font: 16px/1.625 "Open Sans",Arial,sans-serif;
+    color: #262626;
+    background-color: #fff;
+    margin: 0;
+}
+
+a {
+    color: @green;
+    text-decoration: underline;
+    outline: 0;
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+}
+
+input[type="checkbox"]:checked+.form-ui-txt:before {
+    background-position: 0 -30px;
+}
+
+.container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.options {
+    padding: 20px 0 140px;
+    margin: 0px 80px;
+
+    .form-ui input[type="checkbox"],
+    .form-ui input[type="radio"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        outline: 0 none;
+    }
+
+    .form-ui-txt:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background: url('./common/img/radio.png') no-repeat;
+    }
+
+    .form-group {
+        margin: 15px 0 0;
+    }
+
+    .form-ui {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        min-height: 20px;
+        margin: 0;
+        padding: 0 0 0 33px;
+        font-size: 16px;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    .form-ui-txt {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        min-width: 100%;
+        padding: 43px 0;
+        border-top: 1px solid #d9d9d9;
+        font-size: 16px;
+        line-height: 20px;
+
+        .footer_powered,
+        .footer_powered:hover {
+            color: #262626;
+            text-decoration: none;
+        }
+
+        .footer_powered_text {
+            position: relative;
+            top: 1px;
+            margin: 0 2px 0 0;
+        }
+
+        .footer-menu_i {
+            float: left;
+            margin: 0 40px 0 0;
+        }
+
+        .footer-menu_i a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .footer_powered {
+            float: right;
+        }
+    }
+}

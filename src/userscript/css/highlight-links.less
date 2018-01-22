@@ -1,0 +1,28 @@
+.adblock-recovery {
+    all: initial;
+    position: relative!important;
+    display: inline-block!important;
+    margin: 0 0 0 5px!important;
+    vertical-align: middle!important;
+
+    .adblock-recovery-status {
+        all: initial;
+        display: block!important;
+        width: 15px!important;
+        height: 17px!important;
+        vertical-align: middle!important;
+        cursor: pointer!important;
+        .bg('logo.svg');
+        opacity: .5!important;
+
+        &.adblock-recovery-status-1,
+        &.adblock-recovery-status-2,
+        &.adblock-recovery-status-3 {
+            .bg('logo-not-ok.svg');
+        }
+
+        &:hover, &.adblock-recovery-status-show {
+            opacity: 1!important;
+        }
+    }
+}
