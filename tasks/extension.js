@@ -13,7 +13,7 @@ import cleanCSS from 'gulp-clean-css';
 import gulpCss2js from 'gulp-css2js';
 import concat from 'gulp-concat';
 import uglify from 'gulp-uglify';
-const file = require('gulp-file');
+import file from 'gulp-file';
 
 const paths = {
     scripts: {
