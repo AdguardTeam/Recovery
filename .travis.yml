@@ -1,17 +1,17 @@
 language: node_js
 node_js:
-  - "7"
+  - "9"
 install:
   - npm install
 script:
   - npm start
   - npm run ghtest
   - npm test
-  - npm run zip
+  - npm run archive
 deploy:
   - provider: pages
     skip_cleanup: true
     local_dir: 'dist'
-    github_token: $GITHUB_TOKEN_A
+    github_token: $GITHUB_TOKEN
     on:
       branch: master

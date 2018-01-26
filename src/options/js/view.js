@@ -30,9 +30,13 @@ export default class View {
     }
 
     updateOption(handler) {
-        $delegate(this.optionsBlock, '.option', 'click', ({target}) => {
-            let id = target.id;
-            let value = target.children[id].checked;
+        $delegate(this.optionsBlock, 'label.option', 'click', ({target}) => {
+            if (!target.parentNode.id) {
+                return false;
+            }
+
+            let id = target.parentNode.id;
+            let value = target.parentNode.children[0].checked;
             handler(id, value);
         });
     }

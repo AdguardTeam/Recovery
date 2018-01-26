@@ -1,5 +1,5 @@
 /* global chrome */
-import {commonOptions} from './options';
+import {commonOptions,storeName} from './options';
 
 export default class Store {
     constructor() {
@@ -25,17 +25,20 @@ export default class Store {
                 options = this.defaultoptions;
             }
 
-            options[id].show = !value;
+            options[id].show = !!value;
 
             this.setLocalStorage(options);
         }
         // jshint ignore: end
 
         this.setLocalStorage = (data) => {
+            let obj = {};
+            obj[storeName] = JSON.stringify(data);
+
             if (this.chrome) {
-                this.chrome.storage.sync.set({'data': JSON.stringify(data)});
+                this.chrome.storage.sync.set(obj);
             } else {
-                localStorage.setItem('data', JSON.stringify(data));
+                localStorage.setItem(storeName, obj[storeName]);
             }
         };
     }
@@ -44,7 +47,7 @@ export default class Store {
         const _this = this;
         return new Promise(resolve => {
             if (!_this.chrome) {
-                let data = localStorage.getItem('data');
+                let data = localStorage.getItem(storeName);
 
                 if (data) {
                     resolve(JSON.parse(data));
@@ -53,9 +56,9 @@ export default class Store {
                 }
             }
 
-            _this.chrome.storage.sync.get('data', (storageData) => {
-                if (storageData && storageData.data) {
-                    storageData = JSON.parse(storageData.data);
+            _this.chrome.storage.sync.get(storeName, (storageData) => {
+                if (storageData && storageData[storeName]) {
+                    storageData = JSON.parse(storageData[storeName]);
                 }
 
                 resolve(storageData);

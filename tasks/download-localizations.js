@@ -1,6 +1,8 @@
 import fs from 'fs';
+import path from 'path';
 import gulp from 'gulp';
-import downloadStream from 'gulp-download-stream';
+import gutil from 'gulp-util';
+import downloadStream from 'gulp-download2';
 import md5 from 'gulp-hash-creator';
 
 const paths = {
@@ -22,8 +24,9 @@ function prepare() {
     let oneskyapp;
 
     try {
-        oneskyapp = fs.readFileSync('../oneskyapp.json').toString();
+        oneskyapp = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../oneskyapp.json')));
     } catch (err) {
+        gutil.log(gutil.colors.red(err));
         return false;
     }
 
@@ -59,4 +62,4 @@ function download() {
         .pipe(gulp.dest(paths.src));
 }
 
-export default gulp.series(download);
+export default download;

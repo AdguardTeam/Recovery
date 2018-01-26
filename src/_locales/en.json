@@ -69,7 +69,13 @@
         "message": "Powered by"
     },
     "options_sites": {
-        "message": "Sites"
+        "message": "Search engines"
+    },
+    "options_newsfeeds": {
+        "message": "Newsfeeds"
+    },
+    "options_header": {
+        "message": "Settings"
     },
     "options_settings_filters": {
         "message": "Filters"
