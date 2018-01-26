@@ -163,4 +163,8 @@ export default class Controller {
     readMode(content) {
         this.view.openInReadmod(content);
     }
+
+    prepareReadmod() {
+        this.view.prepareReadmodBlock();
+    }
 }

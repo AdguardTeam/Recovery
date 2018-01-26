@@ -15,5 +15,17 @@ export const commonOptions = {
 
 export const storeName = 'adblockRecoveryStoreCommon';
 
+// list of elements classes in which not to highlighting links
+export const excludedClasses = [
+    // duckduckgo.com
+    'module__content',
+
+    // google.com
+    'knowledge-panel',
+
+    // yahoo.com
+    'searchRightTop'
+];
+
 // TODO: remove this after release
 export const googleSpreadSheetPrefix = 'gsx$';

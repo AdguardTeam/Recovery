@@ -91,21 +91,7 @@ export default class View {
                 let location = {
                     href: href
                 };
-
-
-                const readmodBlock = document.createElement('div');
-                const closeBtn = document.createElement('button');
-                readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
-                closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
-                readmodBlock.appendChild(closeBtn);
-                document.body.appendChild(readmodBlock);
                 _this.gettingContentForReadMode(location);
-
-
-                // let fram = document.createElement('iframe');
-                // fram.setAttribute('src', 'chrome-extension://gmeabhofhmlffbbpohfmfcknihdpgffh/readmode.html?url=https://cnews.ru/');
-
-                // document.body.appendChild(fram);
             }, true);
         } catch (ex) {
             logs.error(ex);
@@ -162,11 +148,34 @@ export default class View {
     }
 
     gettingContentForReadMode(location) {
+        this.prepareReadmodBlock();
+
         chromeRuntimeSend({
             from: 'content',
             subject: 'readmode',
             location: location
         });
+    }
+
+    prepareReadmodBlock() {
+        let allredyDef = qs('.adblock-recovery-readmode');
+
+        if (allredyDef) {
+            return allredyDef;
+        }
+
+        let readmodBlock = document.createElement('div');
+        readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
+
+        let closeBtn = document.createElement('button');
+        closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
+
+        readmodBlock.appendChild(closeBtn);
+        $on(closeBtn, 'click', this.closeReadMod);
+
+        document.body.appendChild(readmodBlock);
+
+        return readmodBlock;
     }
 
     /*
@@ -192,13 +201,12 @@ export default class View {
             inlineStyles[index].removeAttribute('style');
         }
 
-        let readmodBlock = qs('.adblock-recovery-readmode');
-        let closeBtn = qs('.adblock-recovery-readmode-close', readmodBlock);
+        let readmodBlock;
         let iframe;
 
         if (!allredyDef) {
+            readmodBlock = this.prepareReadmodBlock();
             iframe = document.createElement('iframe');
-            $on(closeBtn, 'click', this.closeReadMod);
             readmodBlock.appendChild(iframe);
 
             // TODO: take out attributes
@@ -211,6 +219,7 @@ export default class View {
 
         try {
             const doc = iframe.contentDocument;
+            // TODO: styles
             const style = '<style type="text/css">body {position: relative;font: 16px/1.625 "Open Sans",Arial,sans-serif;color: #262626;}a{color:#68BC71;text-decoration: underline;outline: 0;}</style>';
             doc.open();
             doc.write(
@@ -220,14 +229,15 @@ export default class View {
             iframe.style.setProperty('display', 'block', 'important');
 
             $delegate(doc, 'a', 'click', (e) => {
-                let location = {
-                    href: e.target.href
-                };
                 e.preventDefault();
                 e.stopPropagation();
+
+                let location = {
+                    href: e.target.href || e.path.find(el => el.href).href
+                };
                 iframe.style.setProperty('display', 'none', 'important');
                 _this.gettingContentForReadMode(location);
-            }, true);
+            });
         } catch (ex) {
             logs.error(ex);
         }

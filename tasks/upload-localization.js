@@ -1,10 +1,12 @@
+import path from 'path';
 import gulp from 'gulp';
+import gutil from 'gulp-util';
 import md5 from 'gulp-hash-creator';
 import fs from 'fs';
 import request from 'request';
 
-const path = {
-    src: './src/_locales/en.json',
+const src = {
+    en: './src/_locales/en.json',
 };
 
 let oneskyapp;
@@ -17,14 +19,15 @@ function hashString(stringContent) {
 
 function prepare() {
     try {
-        oneskyapp = fs.readFileSync('../oneskyapp.json').toString();
+        oneskyapp = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../oneskyapp.json')));
     } catch (err) {
+        gutil.log(gutil.colors.red(err));
         return false;
     }
 
     const timestamp = Math.round(new Date().getTime() / 1000);
     const formData = {
-        'file': fs.createReadStream(path.src),
+        'file': fs.createReadStream(src.en),
         'file_format': 'HIERARCHICAL_JSON',
         'locale': 'en',
         'is_keeping_all_strings': 'false',

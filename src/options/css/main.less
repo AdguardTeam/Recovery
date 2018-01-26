@@ -34,6 +34,10 @@ a {
     outline: 0;
 }
 
+h1, h2 {
+    margin: 20px 0;
+}
+
 label {
     display: inline-block;
     max-width: 100%;
@@ -49,7 +53,7 @@ input[type="checkbox"]:checked+.form-ui-txt:before {
 }
 
 .options {
-    padding: 20px 0 140px;
+    padding: 0 0 140px;
     margin: 0px 80px;
 
     .form-ui input[type="checkbox"],
@@ -75,7 +79,8 @@ input[type="checkbox"]:checked+.form-ui-txt:before {
     }
 
     .form-group {
-        margin: 15px 0 0;
+        margin: 15px 0;
+        height: 20px;
     }
 
     .form-ui {
@@ -104,6 +109,10 @@ input[type="checkbox"]:checked+.form-ui-txt:before {
         border-top: 1px solid #d9d9d9;
         font-size: 16px;
         line-height: 20px;
+
+        .footer-menu {
+            margin: 0px 80px;
+        }
 
         .footer_powered,
         .footer_powered:hover {

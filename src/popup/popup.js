@@ -24,7 +24,7 @@ let currentPageLocation = null;
  */
 const getSiteData = () => {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {getData: true}, function(response) {
+        chrome.tabs.sendMessage(tabs[0].id, {requestType: 'getData'}, function(response) {
             const lastError = chrome.runtime.lastError;
 
             if (lastError) {
@@ -103,7 +103,7 @@ const openInReadmod = () => {
     }
 
     chrome.runtime.sendMessage({
-        from: 'content',
+        from: 'popup',
         subject: 'readmode',
         location: currentPageLocation
     });

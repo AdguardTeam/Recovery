@@ -11,20 +11,27 @@ export function chromeRuntimeListener(controller) {
     }
 
     chromeRuntime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.getData) {
-            sendResponse({
-                done: true,
-                location: document.location,
-                data: controller.check(document.location.host)
-            });
-        }
-
-        if (request.showReadMode) {
-            controller.readMode(request.content);
-        }
-
-        if (request.dataFromSpredSheet) {
-            controller.dataFromGoogleSpreadSheet(request.content);
+        switch (request.requestType) {
+            case 'getData':
+                // sending site data to popup
+                sendResponse({
+                    done: true,
+                    location: document.location,
+                    data: controller.check(document.location.host)
+                });
+                break;
+            case 'showReadMode':
+                controller.readMode(request.data);
+                break;
+            case 'dataFromSpredSheet':
+                controller.dataFromGoogleSpreadSheet(request.data);
+                break;
+            case 'prepareReadmod':
+                controller.prepareReadmod();
+                break;
+            case 'log':
+                controller.logs.info(request);
+                break;
         }
     });
 }

@@ -1,6 +1,7 @@
 /* global ADBLOCKRECOVERYSTYLE*/
 
 import {$on,qsa,appendCSS,qs} from '../common/js/helpers';
+import {excludedClasses} from '../common/js/options';
 
 export default class Highlightlinks {
     constructor(utils, logs) {
@@ -89,8 +90,7 @@ export default class Highlightlinks {
     linkCheckRequirements(el) {
         let url = decodeURIComponent(el.hostname);
 
-        // do not highlighting links in `.module__content` block on a duckduckgo.com
-        if (this.utils.ancestorValidation(el, 'module__content')) {
+        if (this.checkParentsElements(el)) {
             return false;
         }
 
@@ -115,6 +115,11 @@ export default class Highlightlinks {
             default:
                 return true;
         }
+    }
+
+    // do not highlight links if a some parent has class from excluded list
+    checkParentsElements(el) {
+        return excludedClasses.find(className => this.utils.ancestorValidation(el, className));
     }
 
     /**
