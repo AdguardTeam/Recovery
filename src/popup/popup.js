@@ -11,11 +11,11 @@ import logs from '../common/js/logs';
 import categories from '../_data/categories.json';
 
 const log = new logs();
-const sitename = qs('.adblock-recovery-popup__sitename');
-const techniquesList = qs('.adblock-recovery-popup__techniques-list');
-const optionsBtn = qs('.adblock-recovery-popup__options');
-const readModeBtn = qs('.adblock-recovery-popup__openinreadmode');
-const popup = qs('.adblock-recovery-popup');
+const sitename = qs('.recovery-popup__sitename');
+const techniquesList = qs('.recovery-popup__techniques-list');
+const optionsBtn = qs('.recovery-popup__options');
+const readModeBtn = qs('.recovery-popup__openinreadmode');
+const popup = qs('.recovery-popup');
 
 let currentPageLocation = null;
 
@@ -77,10 +77,10 @@ const appendData = (website) => {
         let icon = threat.warning ? 'status-icon-warning' : 'status-icon-passed';
 
         return text +
-            `<li class="adblock-recovery-popup__status-icon ${icon}"><p>
-            <span class="adblock-recovery-status-name">${i18n(threat.name)}</span>
-            <span class="adblock-recovery-status-tooltip">
-                <span class="adblock-recovery-status-tooltip-text">${i18n(threat.description)}</span>
+            `<li class="recovery-popup__status-icon ${icon}"><p>
+            <span class="recovery-status-name">${i18n(threat.name)}</span>
+            <span class="recovery-status-tooltip">
+                <span class="recovery-status-tooltip-text">${i18n(threat.description)}</span>
             </span>
             </p></li>`;
     }, '');

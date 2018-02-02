@@ -92,7 +92,7 @@ export default class Utils {
      */
     validateLinkAlreadyChecked(el) {
         let href = el.hostname;
-        let iconElements = qsa('.adblock-recovery', el.parentNode);
+        let iconElements = qsa('.recovery', el.parentNode);
         let currentEl;
 
         iconElements.forEach((el) => {
@@ -111,5 +111,12 @@ export default class Utils {
     findAncestor(el, cls) {
         while ((el = el.parentElement) && !el.classList.contains(cls)); // jshint ignore: line
         return el;
+    }
+
+    /**
+     * Check browser shadow dom support
+     */
+    checkShadowDomSupport() {
+        return typeof(document.documentElement.attachShadow) !== 'undefined';
     }
 }

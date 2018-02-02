@@ -1,4 +1,4 @@
-/* global ADBLOCKRECOVERYSTYLE*/
+/* global RECOVERYGLOBALCSS*/
 
 import {$on,qsa,appendCSS,qs} from '../common/js/helpers';
 import {excludedClasses} from '../common/js/options';
@@ -26,8 +26,8 @@ export default class Highlightlinks {
             return false;
         }
 
-        if (!qs('#adblock-recovery-styles')) {
-            appendCSS(ADBLOCKRECOVERYSTYLE, null, 'adblock-recovery-styles');
+        if (!qs('#recovery-styles')) {
+            appendCSS(RECOVERYGLOBALCSS, null, 'recovery-styles');
         }
 
         this.linkElements.forEach((el) => this.addIconToLinkElement(el, handler));
@@ -53,16 +53,16 @@ export default class Highlightlinks {
         let adblockRecoveryIcon, adblockRecovery;
 
         adblockRecoveryIcon = document.createElement('div');
-        adblockRecoveryIcon.className = 'adblock-recovery-status';
+        adblockRecoveryIcon.className = 'recovery-status';
 
         adblockRecovery = document.createElement('div');
-        adblockRecovery.className = 'adblock-recovery';
+        adblockRecovery.className = 'recovery';
         adblockRecovery.setAttribute('data-href', el.href);
         adblockRecovery.setAttribute('data-href-alt', elementData.domain);
         adblockRecovery.appendChild(adblockRecoveryIcon);
 
         elementData.categories.forEach((lvl) => {
-            adblockRecoveryIcon.classList.add('adblock-recovery-status-' + lvl);
+            adblockRecoveryIcon.classList.add('recovery-status-' + lvl);
         });
 
         el.parentNode.insertBefore(adblockRecovery, el.nextSibling);
