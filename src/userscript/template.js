@@ -24,16 +24,16 @@ export default class Template {
 
             return `${text}<li class="status-icon-${icon}">
                 <p>
-                    <b class="adblock-recovery-threat-name">${i18n(escapeForHTML(threat.name))}</b>
-                    <span class="adblock-recovery-status-tooltip">
-                        <span class="adblock-recovery-status-tooltip-text">${i18n(escapeForHTML(threat.description))}</span>
+                    <b class="recovery-threat-name">${i18n(escapeForHTML(threat.name))}</b>
+                    <span class="recovery-status-tooltip">
+                        <span class="recovery-status-tooltip-text">${i18n(escapeForHTML(threat.description))}</span>
                     </span>
                 </p>
             </li>`;
         }, '');
 
-        return `<div class="adblock-recovery-status-content">
-            <button class="adblock-recovery-status-close">×</button>
+        return `<div class="recovery-status-content">
+            <button class="recovery-status-close">×</button>
             <h1 class="adguard-status-recovery">
                 ${i18n('adblock_recovery')}
             </h1>
@@ -42,8 +42,8 @@ export default class Template {
             </p>
             <p>${escapeForHTML(data.domain)} ${i18n('mechanisms')}:</p>
             <ul class="status-list">${threats}</ul>
-            <button class="adblock-recovery-btn adblock-recovery-do-not-agree">${i18n('do_not_agree')}</button>
-            <button class="adblock-recovery-btn adblock-recovery-status-readmod">${i18n('open_read_view')}</button>
+            <button class="recovery-btn recovery-do-not-agree">${i18n('do_not_agree')}</button>
+            <button class="recovery-btn recovery-status-readmod">${i18n('open_read_view')}</button>
         </div>`;
     }
 }

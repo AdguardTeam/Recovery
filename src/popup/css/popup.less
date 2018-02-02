@@ -17,7 +17,7 @@ body {
     margin: 0;
 }
 
-.adblock-recovery-popup {
+.recovery-popup {
     width: 270px;
     padding: 10px 20px;
     background: #fff;
@@ -54,7 +54,7 @@ body {
             }
         }
 
-        .adblock-recovery-popup__status-icon {
+        .recovery-popup__status-icon {
             &:before {
                 position: absolute;
                 content: ' ';
@@ -73,12 +73,12 @@ body {
                 }
             }
 
-            .adblock-recovery-status-name {
+            .recovery-status-name {
                 display: inline-block;
                 vertical-align: middle;
             }
 
-            .adblock-recovery-status-tooltip {
+            .recovery-status-tooltip {
                 display: inline-block;
                 vertical-align: middle;
                 width: 15px;
@@ -87,7 +87,7 @@ body {
                 opacity: 0.8;
                 .bg('tooltip.svg');
 
-                .adblock-recovery-status-tooltip-text {
+                .recovery-status-tooltip-text {
                     position: absolute;
                     display: block;
                     right: 0;
@@ -105,7 +105,7 @@ body {
                 &:hover {
                     opacity: 1;
 
-                    .adblock-recovery-status-tooltip-text {
+                    .recovery-status-tooltip-text {
                         opacity: 1;
                         visibility: visible;
                     }
@@ -114,7 +114,7 @@ body {
         }
     }
 
-    .adblock-recovery-popup__options {
+    .recovery-popup__options {
         display: inline-block;
         width: 15px;
         height: 15px;
@@ -126,16 +126,16 @@ body {
         .bg('settings.svg');
     }
 
-    .adblock-recovery-popup__nodata {
+    .recovery-popup__nodata {
         display: none;
     }
 
     &.no-data {
-        .adblock-recovery-popup__data {
+        .recovery-popup__data {
             display: none;
         }
 
-        .adblock-recovery-popup__nodata {
+        .recovery-popup__nodata {
             display: block;
         }
     }

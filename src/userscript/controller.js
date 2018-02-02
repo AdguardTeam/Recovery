@@ -146,7 +146,7 @@ export default class Controller {
      * @param  {Object} nodes       changeable DOM node
      */
     rebuild(_this, elClasses, nodes) {
-        if (nodes.className !== 'adblock-recovery-content' && !elClasses.contains('adblock-recovery') && !elClasses.contains('adblock-recovery-status')) {
+        if (nodes.className !== 'recovery-content' && !elClasses.contains('recovery') && !elClasses.contains('recovery-status')) {
             _this.highlightlinks.show(_this.check);
         }
     }

@@ -1,4 +1,4 @@
-/* global ADBLOCKRECOVERYSTYLE */
+/* global RECOVERYGLOBALCSS */
 import {$on, $delegate, qsa, qs, appendCSS} from '../common/js/helpers';
 import logs from '../common/js/logs';
 
@@ -7,16 +7,14 @@ import Urls from '../_data/urls.json';
 import {chromeRuntimeSend} from './chrome.runtime';
 
 export default class View {
-    constructor(template) {
+    constructor(template, utils) {
         this.template = template;
+        this.utils = utils;
 
         $on(document, 'click', this.closeLinksStatus);
-        $delegate(document, '.adblock-recovery-status', 'click', ({target}) => {
+        $delegate(document, '.recovery-status', 'click', ({target}) => {
             this.closeLinksStatus();
             this.showLinkStatus(target);
-        }, true);
-        $delegate(document, '.adblock-recovery-status-close', 'click', () => {
-            this.closeLinksStatus();
         }, true);
     }
 
@@ -27,38 +25,98 @@ export default class View {
      */
     showLinkStatus(target) {
         const _this = this;
-        target.classList.add('adblock-recovery-status-show');
+        target.classList.add('recovery-status-show');
+        const status = Urls.data.find((link) => {
+            return target.parentNode.getAttribute('data-href').indexOf(link.domain) >= 0 || target.parentNode.getAttribute('data-href-alt').indexOf(link.domain) >= 0;
+        });
+        const rect = this.getOffsetRect(target);
+        const content = _this.template.linkStatus(status);
+        const urlForReadMode = target.parentNode.getAttribute('data-href');
+        let el = null;
 
-        let rect = this.getOffsetRect(target);
+        if (this.utils.checkShadowDomSupport()) {
+            el = this.createShadowRootElement(content, rect, urlForReadMode);
 
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('class', 'adblock-recovery-status-iframe');
+            // storing shadowdom root element to close popover event
+            this.shadowDomRoot = el;
+        } else {
+            el = this.createIframeElement(content, rect, urlForReadMode);
+        }
+
+        document.documentElement.appendChild(el);
+    }
+
+    appendDefailtEvents(el, url) {
+        const _this = this;
+
+        $delegate(el, '.recovery-status-close', 'click', () => {
+            _this.closeLinksStatus();
+        }, true);
+
+        $delegate(el, '.recovery-status-readmod', 'click', () => {
+            // `location` variable is like document.location
+            let location = {
+                href: url
+            };
+            _this.gettingContentForReadMode(location);
+        }, true);
+    }
+
+    createIframeElement(content, rect, url) {
+        let iframe = document.createElement('iframe');
+        iframe.setAttribute('class', 'recovery-status-iframe');
         iframe.setAttribute('frameBorder', 0);
         iframe.setAttribute('width', 350);
         iframe.setAttribute('allowTransparency', 'true');
-
         this.moveElementTo(iframe, rect.left, rect.top);
 
-        let iframeAlreadyLoaded = false;
+        iframe.onload = () => {
+            const doc = iframe.contentDocument;
 
-        iframe.onload = function() {
-            if (iframeAlreadyLoaded) {
-                //IE calls load each time when we use document.close
-                return;
-            }
-            iframeAlreadyLoaded = true;
-            let status = Urls.data.find((link) => {
-                return target.parentNode.getAttribute('data-href').indexOf(link.domain) >= 0 || target.parentNode.getAttribute('data-href-alt').indexOf(link.domain) >= 0;
-            });
-            const content = _this.template.linkStatus(status);
-            _this.appendContentToIframe(iframe, content, target.parentNode.getAttribute('data-href'));
+            // RECOVERYGLOBALCSS - global styles string which created by the gulp task `tasks/extension.js`
+            const style = '<style type="text/css">' + RECOVERYGLOBALCSS + '</style>';
+            doc.open();
+            doc.write('<html><head>' + style + '</head><body class="recovery-status-body">' + content + '</body></html>');
+            doc.close();
 
-            $delegate(document, '.adblock-recovery-status-close', 'click', () => {
-                _this.closeLinksStatus();
-            }, true);
+            // setting iframe height dynamically based on inner content
+            iframe.setAttribute('height', iframe.contentWindow.document.body.scrollHeight || 370);
+            this.appendDefailtEvents(doc, url);
         };
 
-        document.body.appendChild(iframe);
+        return iframe;
+    }
+
+    createShadowRootElement(content, rect, url) {
+        const el = document.createElement('div');
+        const shadowRootElement = el.attachShadow({mode: 'closed'});
+
+        const shadowRootDefaultStyle = {
+            display: 'block',
+            width: 0,
+            height: 0,
+            margin: 0,
+            padding: 0,
+            overflow: 'hidden',
+            'z-index': 9999999999
+        };
+
+        let style = [];
+
+        Object.keys(shadowRootDefaultStyle).forEach(function(key) {
+            style.push(key + ':' + shadowRootDefaultStyle[key] + '!important;');
+        });
+
+        style = ':host {' + style.join('') + '}';
+        shadowRootElement.innerHTML = '<style>' + style + RECOVERYGLOBALCSS + '</style>' + content;
+
+        let contentEl = shadowRootElement.querySelector('div.recovery-status-content');
+
+        contentEl.classList.add('recovery-status-content--margin');
+        this.moveElementTo(contentEl, rect.left, rect.top);
+        this.appendDefailtEvents(shadowRootElement, url);
+
+        return el;
     }
 
     /**
@@ -66,49 +124,40 @@ export default class View {
      *
      * @param {Object} iframe   current iframe
      * @param {String} content   content
+     * @param {String} href   url link to open read mode
      */
     appendContentToIframe(iframe, content, href) {
-        const _this = this;
-        try {
-            const doc = iframe.contentDocument;
+        const doc = iframe.contentDocument;
 
-            // ADBLOCKRECOVERYSTYLE - global styles string which created by the gulp
-            const style = '<style type="text/css">' + ADBLOCKRECOVERYSTYLE + '</style>';
-            doc.open();
-            doc.write('<html><head>' + style + '</head><body class="adblock-recovery-status-body">' + content + '</body></html>');
-            doc.close();
-            iframe.style.setProperty('display', 'block', 'important');
+        // RECOVERYGLOBALCSS - global styles string which created by the gulp task `tasks/extension.js`
+        const style = '<style type="text/css">' + RECOVERYGLOBALCSS + '</style>';
+        doc.open();
+        doc.write('<html><head>' + style + '</head><body class="recovery-status-body">' + content + '</body></html>');
+        doc.close();
+        iframe.style.setProperty('display', 'block', 'important');
 
-            // setting iframe height dynamically based on inner content
-            iframe.setAttribute('height', iframe.contentWindow.document.body.scrollHeight || 370);
+        // setting iframe height dynamically based on inner content
+        iframe.setAttribute('height', iframe.contentWindow.document.body.scrollHeight || 370);
 
-            $delegate(doc, '.adblock-recovery-status-close', 'click', () => {
-                _this.closeLinksStatus();
-            }, true);
+        // `location` variable is like document.location
+        let location = {
+            href: href
+        };
 
-            $delegate(doc, '.adblock-recovery-status-readmod', 'click', () => {
-                // `location` variable is like document.location
-                let location = {
-                    href: href
-                };
-                _this.gettingContentForReadMode(location);
-            }, true);
-        } catch (ex) {
-            logs.error(ex);
-        }
+        this.appendDefailtEvents(iframe.contentWindow.document.body, location);
     }
 
     /**
      * closing popup with information about the link
      */
     closeLinksStatus() {
-        let frame = qs('.adblock-recovery-status-iframe');
+        let frame = this.shadowDomRoot || qs('.recovery-status-iframe');
         if (frame) {
             frame.remove();
             frame = null;
         }
-        qsa('.adblock-recovery-status-show').forEach((e) => {
-            e.classList.remove('adblock-recovery-status-show');
+        qsa('.recovery-status-show').forEach((e) => {
+            e.classList.remove('recovery-status-show');
         });
     }
 
@@ -158,17 +207,17 @@ export default class View {
     }
 
     prepareReadmodBlock() {
-        let allredyDef = qs('.adblock-recovery-readmode');
+        let allredyDef = qs('.recovery-readmode');
 
         if (allredyDef) {
             return allredyDef;
         }
 
         let readmodBlock = document.createElement('div');
-        readmodBlock.setAttribute('class', 'adblock-recovery-readmode');
+        readmodBlock.setAttribute('class', 'recovery-readmode');
 
         let closeBtn = document.createElement('button');
-        closeBtn.setAttribute('class', 'adblock-recovery-readmode-close');
+        closeBtn.setAttribute('class', 'recovery-readmode-close');
 
         readmodBlock.appendChild(closeBtn);
         $on(closeBtn, 'click', this.closeReadMod);
@@ -183,7 +232,7 @@ export default class View {
      */
     openInReadmod(responseText) {
         const _this = this;
-        let allredyDef = qs('.adblock-recovery-readmode > iframe');
+        let allredyDef = qs('.recovery-readmode > iframe');
 
         let content = new DOMParser().parseFromString(responseText, 'text/html');
 
@@ -242,15 +291,13 @@ export default class View {
             logs.error(ex);
         }
 
-
-
-        if (!qs('#adblock-recovery-styles')) {
-            appendCSS(ADBLOCKRECOVERYSTYLE, null, 'adblock-recovery-styles');
+        if (!qs('#recovery-styles')) {
+            appendCSS(RECOVERYGLOBALCSS, null, 'recovery-styles');
         }
     }
 
     closeReadMod() {
-        let readmodBlock = qs('.adblock-recovery-readmode');
+        let readmodBlock = qs('.recovery-readmode');
 
         if (readmodBlock) {
             readmodBlock.remove();

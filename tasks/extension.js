@@ -80,8 +80,8 @@ const styles = () => {
 const cssToJs = () => {
     return gulp.src('./dist/style.css')
         .pipe(gulpCss2js({
-            prefix: 'var ADBLOCKRECOVERYSTYLE = "',
-            suffix: '";\n'
+            prefix: `var RECOVERYGLOBALCSS = "`,
+            suffix: `";\n`
         }))
         .pipe(gulp.dest('./dist/'));
 };

@@ -56,7 +56,7 @@ export default class View {
             links[index].setAttribute('href', url);
         }
 
-        const closeBtn = qs('.adblock-recovery-readmode-close');
+        const closeBtn = qs('.recovery-readmode-close');
 
         $on(closeBtn, 'click', () => {
             chrome.tabs.getCurrent((tab) => {
