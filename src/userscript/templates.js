@@ -3,6 +3,11 @@ import {i18n} from '../common/js/localization';
 
 import categories from '../_data/categories.json';
 
+/**
+ * Html templates for userscript.
+ * @constructor
+ * @param {object} data - data to display.
+ */
 export default class Template {
     linkStatus(data) {
         let text = {};
@@ -34,16 +39,12 @@ export default class Template {
 
         return `<div class="recovery-status-content">
             <button class="recovery-status-close">×</button>
-            <h1 class="adguard-status-recovery">
-                ${i18n('adblock_recovery')}
-            </h1>
             <p class="status status-${escapeForHTML(text.statusClass)}">
                 ${i18n('status')}: ${escapeForHTML(text.status)}
             </p>
-            <p>${escapeForHTML(data.domain)} ${i18n('mechanisms')}:</p>
+            <p>${i18n('mechanisms').replace('%domain%', data.domain)}:</p>
             <ul class="status-list">${threats}</ul>
-            <button class="recovery-btn recovery-do-not-agree">${i18n('do_not_agree')}</button>
-            <button class="recovery-btn recovery-status-readmod">${i18n('open_read_view')}</button>
+            <button class="recovery-btn recovery-status-readmode">${i18n('open_read_view')}</button>
         </div>`;
     }
 }

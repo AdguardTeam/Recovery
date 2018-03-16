@@ -26,8 +26,8 @@ export function chromeRuntimeListener(controller) {
             case 'dataFromSpredSheet':
                 controller.dataFromGoogleSpreadSheet(request.data);
                 break;
-            case 'prepareReadmod':
-                controller.prepareReadmod();
+            case 'prepareReadMode':
+                controller.prepareReadMode();
                 break;
             case 'log':
                 controller.logs.info(request);

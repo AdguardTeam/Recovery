@@ -66,6 +66,11 @@ export default class Highlightlinks {
         });
 
         el.parentNode.insertBefore(adblockRecovery, el.nextSibling);
+
+        // overflow bug in google.com with long links
+        // in search results the recovery icons is clipped
+        el.parentNode.style.overflow = 'visible';
+
         $on(adblockRecoveryIcon, 'click', this.stopPropagation);
     }
 

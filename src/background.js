@@ -98,7 +98,7 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
     switch (msg.subject) {
         case 'readmode':
             if (msg.from === 'popup') {
-                sendMessageToCurrentTab('prepareReadmod');
+                sendMessageToCurrentTab('prepareReadMode');
             }
 
             requestForReadMode(msg);

@@ -3,13 +3,13 @@
         "message": "Status"
     },
     "mechanisms": {
-        "message": "site you are trying to navigate uses anti-blocking mechanisms"
+        "message": "The website you are trying to navigate (%domain%) uses following anti-adblocking mechanisms"
     },
     "adblock_recovery": {
         "message": "Adblock Recovery"
     },
     "adblock_wall_description": {
-        "message": "Blocking access to content description"
+        "message": "Websites detects ad blockers and restricts content unless you disable them"
     },
     "paywall_description": {
         "message": "Paywall description"

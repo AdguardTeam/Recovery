@@ -7,14 +7,13 @@ import testsGhPages from './tests-gh-pages';
 import downloadLocalizations from './download-localizations';
 import uploadLocalization from './upload-localization';
 import zip from './zip';
-import readmode from './readmode';
 
 const end = (done) => {
     gutil.log(gutil.colors.green('Success!'));
     done();
 };
 
-export const dev = gulp.series(options, readmode, popup, extension, (done) => end(done));
+export const dev = gulp.series(options, popup, extension, (done) => end(done));
 export const ghtest = gulp.series(testsGhPages, (done) => end(done));
 export const locales = gulp.series(downloadLocalizations, (done) => end(done));
 export const upload = gulp.series(uploadLocalization, (done) => end(done));

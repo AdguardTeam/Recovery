@@ -1,6 +1,12 @@
 import {qsa, qs} from '../common/js/helpers';
 import {settings} from '../common/js/settings';
 
+/**
+ * Secondary functions class.
+ * @constructor
+ * @param {class} logs - logging info or errors.
+ * @returns {{validatePage: Function, checkVisibleAreaSize: Function, validateUrlString: Function, validateUrlIsExternal: Function, validateLinkIsNotEmpty: Function, validateLinkIsNotBgImage: Function, validateLinkIsNotTagImage: Function, validateLinkAlreadyChecked: Function, ancestorValidation: Function, checkShadowDomSupport: Function}}
+ */
 export default class Utils {
     constructor(logs) {
         this.logs = logs;

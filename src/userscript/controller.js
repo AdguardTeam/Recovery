@@ -5,11 +5,22 @@ import {googleSpreadSheetPrefix} from '../common/js/options';
 
 import {chromeRuntimeSend, chromeRuntimeListener} from './chrome.runtime';
 
+/**
+ * Main userscript controller.
+ * @constructor
+ * @param {class} logs - logging info or errors.
+ * @param {class} popover - popover view.
+ * @param {class} highlightlinks - links view.
+ * @param {class} readmode - readmode view.
+ * @param {class} store - stored data.
+ * @param {class} utils - secondary functions.
+ */
 export default class Controller {
-    constructor(logs, view, highlightlinks, store, utils) {
+    constructor(logs, popover, highlightlinks, readmode, store, utils) {
         this.store = store;
-        this.view = view;
+        this.readmode = readmode;
         this.utils = utils;
+        this.popover = popover;
         this.highlightlinks = highlightlinks;
         this.logs = logs;
         this.observer = null;
@@ -73,6 +84,7 @@ export default class Controller {
         if (this.pageCheckRequirements(options)) {
             this.highlightlinks.show(this.check);
             this.mutationObserver();
+            this.popover.init(this.readmode);
         }
 
         if (this.utils.validatePage() && this.utils.checkVisibleAreaSize()) {
@@ -161,10 +173,6 @@ export default class Controller {
     }
 
     readMode(content) {
-        this.view.openInReadmod(content);
-    }
-
-    prepareReadmod() {
-        this.view.prepareReadmodBlock();
+        this.readmode.openInReadMode(content);
     }
 }

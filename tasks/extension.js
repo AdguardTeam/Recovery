@@ -17,7 +17,7 @@ import file from 'gulp-file';
 
 const paths = {
     scripts: {
-        entry: 'src/userscript/userscript.js',
+        entry: 'src/userscript/main.js',
         src: 'src/userscript/js/**/*.js',
         name: 'userscript.js'
     },

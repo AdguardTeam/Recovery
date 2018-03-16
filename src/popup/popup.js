@@ -14,7 +14,6 @@ const log = new logs();
 const sitename = qs('.recovery-popup__sitename');
 const techniquesList = qs('.recovery-popup__techniques-list');
 const optionsBtn = qs('.recovery-popup__options');
-const readModeBtn = qs('.recovery-popup__openinreadmode');
 const popup = qs('.recovery-popup');
 
 let currentPageLocation = null;
@@ -97,18 +96,6 @@ const noData = (url) => {
     }
 };
 
-const openInReadmod = () => {
-    if (!currentPageLocation) {
-        return false;
-    }
-
-    chrome.runtime.sendMessage({
-        from: 'popup',
-        subject: 'readmode',
-        location: currentPageLocation
-    });
-};
-
 window.addEventListener('DOMContentLoaded', function() {
     optionsBtn.addEventListener('click', function() {
         if (chrome.runtime.openOptionsPage) {
@@ -117,10 +104,6 @@ window.addEventListener('DOMContentLoaded', function() {
         } else {
             window.open(chrome.runtime.getURL('options.html'));
         }
-    });
-
-    readModeBtn.addEventListener('click', function() {
-        openInReadmod();
     });
 
     getSiteData();
